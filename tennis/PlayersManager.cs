@@ -36,9 +36,10 @@ namespace tennis
             Console.WriteLine("Register the players: (Enter for finish)");
             bool _exit = false;
             int id = 1;
+            Console.WriteLine("readPlayers");
             while (!_exit)
             {
-                Console.Write("Player name: ");
+                Console.Write("Name: ");
                 string name = Console.ReadLine();
                 if (String.IsNullOrEmpty(name))
                 {
@@ -51,7 +52,7 @@ namespace tennis
             }            
         }
 
-        public void _setInitialRandomService(int []ids)
+        public void setInitialRandomService(int []ids)
         {
             Debug.Assert(this._players.Count >= 2 && ids.Length == 2, "Players have not been configured");                       
             (this._players[ids[new Random().Next(2)]] as Player).switchService();
@@ -64,6 +65,11 @@ namespace tennis
             {
                 (this._players[id] as Player).switchService();
             }
-        }        
+        }
+
+        internal Player getPlayerById(int id)
+        {
+            return (this._players[id] as Player);
+        }
     }
 }

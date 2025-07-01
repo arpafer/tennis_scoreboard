@@ -31,5 +31,34 @@ namespace tennis
             return this._service;
         }
         
+        internal bool hasFirstFault()
+        {
+            return this._fault;
+        }
+
+        internal void activateFault()
+        {
+            this._fault = true;
+        }
+
+        internal void DesactiveFault()
+        {
+            this._fault = false;
+        }
+
+        internal string toString()
+        {
+            string result = "";
+            if (this.hasService())
+            {
+                result = "* ";
+            }
+            if (this.hasFirstFault())
+            {
+                result = "+ ";
+            }
+            result += this._name + " : ";
+            return result;
+        }
     }
 }

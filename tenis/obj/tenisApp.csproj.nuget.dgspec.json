@@ -27,7 +27,11 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "F:\\Users\\Antonio\\Documents\\escuelait\\CURSO_DISEÑO_SOFTWARE\\tenis\\tennis\\tennis.csproj": {
+                "projectPath": "F:\\Users\\Antonio\\Documents\\escuelait\\CURSO_DISEÑO_SOFTWARE\\tenis\\tennis\\tennis.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -62,6 +66,21 @@
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
         }
+      }
+    },
+    "F:\\Users\\Antonio\\Documents\\escuelait\\CURSO_DISEÑO_SOFTWARE\\tenis\\tennis\\tennis.csproj": {
+      "restore": {
+        "projectUniqueName": "F:\\Users\\Antonio\\Documents\\escuelait\\CURSO_DISEÑO_SOFTWARE\\tenis\\tennis\\tennis.csproj",
+        "projectName": "tennis",
+        "projectPath": "F:\\Users\\Antonio\\Documents\\escuelait\\CURSO_DISEÑO_SOFTWARE\\tenis\\tennis\\tennis.csproj",
+        "frameworks": {
+          "net472": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net472": {}
       }
     }
   }

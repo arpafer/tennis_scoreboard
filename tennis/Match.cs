@@ -12,36 +12,90 @@ namespace tennis
     {        
         private int _currentSet;        
         private int[] _playerIds;
-        private Set[] _sets;
+        private Set[] _setsToPlay;
 
-        public Match(int numSets, int[] ids)
+        public Match()
         {
-            this._currentSet = 0;
-            this._sets = new Set[numSets];
-            this._playerIds = ids;
-        }        
-        
+            this._currentSet = 0;            
+        }       
+
         public void play()
         {
-            Debug.Assert((this._sets.Length == 3 || this._sets.Length == 5) && this._playerIds.Length == 2, "Match not set yet");
-            PlayersManager.instance().
-
-            while (this._currentSet < this._sets.Length - 1)
+            Debug.Assert((this._setsToPlay.Length == 3 || this._setsToPlay.Length == 5) && this._playerIds.Length == 2, "Match not set yet");
+            this._config();
+            PlayersManager.instance().setInitialRandomService(this._playerIds);            
+            while (this._currentSet < this._setsToPlay.Length - 1)
             {
                 Set _set = new Set();
-                this._sets[this._currentSet] = _set;
+                this._setsToPlay[this._currentSet] = _set;
                 _set.play();
-                if (_set.isFinish())
+                if (_set.isFinished())
                 {
-                    this._currentSet++;
-                    this._show();
+                    this._currentSet++;                    
+                    PlayersManager.instance().switchServices(this._playerIds);
                 }
             }
+            ScoreBoard.instance().show();
         }
 
-        private void _show()
+        private void _config()
         {
+            this._setsToPlay = new Set[this._readSetsNum()];
+            this._playerIds = this._readIds();
+        }
 
+        private int _readSetsNum()
+        {
+            Console.WriteLine("createMatch: ");
+            Console.Write("sets: ");
+            string _sets = Console.ReadLine();
+            int _numSets = 0;
+            try
+            {
+                _numSets = int.Parse(_sets);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("invalid sets number");
+            }
+            return _numSets;
+        }
+
+        private int[] _readIds()
+        {
+            Console.Write("ids: ");
+            string _ids = Console.ReadLine();
+            string[] _idsChunks = Console.ReadLine().Split(',');
+            List<int> idsArray = new List<int>();
+            if (_idsChunks.Length == 2)
+            {
+                foreach (string ids in _idsChunks)
+                {
+                    idsArray.Add(int.Parse(ids));
+                }
+                if (idsArray.Count != 2)
+                {
+                    Console.WriteLine("Invalid ids number");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid ids number");
+            }
+            return idsArray.ToArray();
+        }
+
+        internal string toString()
+        {
+            string result = "";
+            foreach (int id in _playerIds)
+            {                
+                foreach (Set _set in this._setsToPlay)
+                {
+                    result += _set.toString(id);
+                }
+            }
+            return result;
         }
     }
 }
