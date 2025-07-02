@@ -40,9 +40,9 @@ namespace tennis
                     _game.play();                    
                     _hasWinner = this._hasSetWinner(_game);
                     _game.init();                    
-                }                
-                ScoreBoard.instance().show();
+                }
                 PlayersManager.instance().switchService(playersIds);
+                ScoreBoard.instance().show();                
             } while (!_hasWinner);            
         }
 
