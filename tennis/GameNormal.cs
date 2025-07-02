@@ -8,15 +8,20 @@ namespace tennis
 {
     internal class GameNormal: Game
     {
-        private Point _servicePoints;
-        private Point _restPoints;
+        private PointNormal _servicePoints;
+        private PointNormal _restPoints;
 
 
         internal GameNormal() : base()
-        {                        
-            this._servicePoints = new Point();
-            this._restPoints = new Point();
-        }                      
+        {
+            this.init();
+        }
+
+        internal void init()
+        {
+            this._servicePoints = new PointNormal();
+            this._restPoints = new PointNormal();
+        }
 
         internal bool isWinnerService()
         {
@@ -25,12 +30,12 @@ namespace tennis
 
         protected override void _addServicePoints()
         {
-            this._servicePoints.add();
+            this._servicePoints.add(this._restPoints);
         }
 
         protected override void _addRestPoints()
         {
-            this._restPoints.add();
+            this._restPoints.add(this._servicePoints);
         }
 
         protected override bool _hasWinner()
@@ -47,5 +52,6 @@ namespace tennis
         {
             return this._restPoints.toString();
         }
+       
     }
 }

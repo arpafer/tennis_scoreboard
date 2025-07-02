@@ -8,73 +8,71 @@ namespace tennis
 {
     internal class Set
     {        
-        private List<GameNormal> _games;
+        private List<GameNormal> _gamesNormal;
         private bool _hasTiebreak;
-        private int _serviceGames;
-        private int _restGames;
-        private bool _hasWinner;        
+        private int _winnedServiceGames;
+        private int _winnedRestGames;
+        private bool _hasWinner;
+        private Tiebreak _tiebreak;
 
         internal Set()
         {
             this._hasTiebreak = false;
-            this._games = new List<GameNormal>();
-            this._serviceGames = 0;
-            this._restGames = 0;
-            this._hasWinner = false;
+            this._gamesNormal = new List<GameNormal>();
+            this._winnedServiceGames = 0;
+            this._winnedRestGames = 0;
+            this._hasWinner = false;            
         }
 
-        internal void play()
+        internal void play(int[] playersIds)
         {            
             do
             {                
                 if (this._hasTiebreak)
                 {
-                    Tiebreak _tiebreak = new Tiebreak();
+                    this._tiebreak = new Tiebreak();
                     _tiebreak.play();
-                    _hasWinner = this._hasTiebreakWinner(_tiebreak);
+                    _hasWinner = this._hasTiebreakWinner(_tiebreak);                    
                 } else
                 {
                     GameNormal _game = new GameNormal();
-                    _game.play();
-                    this._games.Add(_game);
+                    this._gamesNormal.Add(_game);
+                    _game.play();                    
                     _hasWinner = this._hasSetWinner(_game);
-                }
-            } while (!_hasWinner);
-            ScoreBoard.instance().show();
+                    _game.init();                    
+                }                
+                ScoreBoard.instance().show();
+                PlayersManager.instance().switchService(playersIds);
+            } while (!_hasWinner);            
         }
 
         private bool _hasSetWinner(GameNormal game)
         {                                  
             if (game.isWinnerService())
-                this._serviceGames++;
+                this._winnedServiceGames++;
             else
-                this._restGames++;
+                this._winnedRestGames++;
 
-            if (this._serviceGames == 6 && this._restGames == this._serviceGames)
+            if (this._winnedServiceGames == 6 && this._winnedRestGames == this._winnedServiceGames)
             {
                 this._hasTiebreak = true;                
                 return false;
             }
-            if (Math.Abs(this._serviceGames - this._restGames) >= 2)
+            if (Math.Abs(this._winnedServiceGames - this._winnedRestGames) >= 2)
             {
                 return true;
             }
             return false;
-        }        
-
-        private bool _hasServiceWinner()
-        {
-            return this._serviceGames - this._restGames >= 2;
-        }
+        }              
 
         private bool _hasTiebreakWinner(Tiebreak _tiebreak)
         {
             if (_tiebreak.isWinnerService())
-                this._serviceGames++;
+                this._winnedServiceGames++;
             else
-                this._restGames++;
+                this._winnedRestGames++;
 
-            if (Math.Abs(this._serviceGames - this._restGames) >= 2)
+            if (Math.Abs(this._winnedServiceGames - this._winnedRestGames) >= 2)
             {
                 return true;
             }
@@ -86,16 +84,42 @@ namespace tennis
             return this._hasWinner;
         }
      
-        internal string toString(int id)
+        internal string toString(int idPlayer)
         {
             string result = "";
-            Player _player = PlayersManager.instance().getPlayerById(id);
+            Player _player = PlayersManager.instance().getPlayerById(idPlayer);           
             if (_player.hasService())
             {
               //  result += this.game
-                return this._serviceGames.ToString();
+                result += (this._isStarting())? "-": this._winnedServiceGames.ToString();
+            } else
+            {
+                result += (this._isStarting()) ? "-": this._winnedRestGames.ToString();
             }
-            return this._restGames.ToString();
+            return result;            
+        }
+
+        private bool _isStarting()
+        {
+            return this._winnedServiceGames == 0 && this._winnedRestGames == 0;
+        }
+
+        internal string toStringGamePoints(int idPlayer)
+        {
+            string result = "";
+            Player _player = PlayersManager.instance().getPlayerById(idPlayer);
+            if (this._hasTiebreak)
+            {
+                result = this._tiebreak.toString(idPlayer) + "  ";
+            }
+            else
+            {
+                if (this._gamesNormal.Count > 0)
+                    result = this._gamesNormal[this._gamesNormal.Count - 1].toString(idPlayer) + "  ";
+                else
+                    result += "0  ";
+            }
+            return result;
         }
     }
 }

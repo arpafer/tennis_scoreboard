@@ -31,9 +31,9 @@ namespace tennis
             this._match = match;
         }
 
-        internal void show()
+        internal void show(bool hasLack = false)
         {
-            Console.WriteLine(this._match.toString());
+            Console.WriteLine(this._match.toString(hasLack));
         }
     }
 }

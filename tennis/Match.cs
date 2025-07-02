@@ -4,97 +4,142 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace tennis
 {
     public class Match
     {        
-        private int _currentSet;        
+        private int _currentSetIndex;        
         private int[] _playerIds;
-        private Set[] _setsToPlay;
+        private List<Set> _setsToPlay;
 
         public Match()
         {
-            this._currentSet = 0;            
+            this._currentSetIndex = 0;
+            this._playerIds = new int[0];
+            this._setsToPlay = new List<Set>();
         }       
 
         public void play()
-        {
-            Debug.Assert((this._setsToPlay.Length == 3 || this._setsToPlay.Length == 5) && this._playerIds.Length == 2, "Match not set yet");
-            this._config();
+        {         
+            Debug.Assert(this._isValidConfig(), "Match not set yet");
+
+            ScoreBoard.instance().set(this);
             PlayersManager.instance().setInitialRandomService(this._playerIds);            
-            while (this._currentSet < this._setsToPlay.Length - 1)
+            do
             {
-                Set _set = new Set();
-                this._setsToPlay[this._currentSet] = _set;
-                _set.play();
-                if (_set.isFinished())
-                {
-                    this._currentSet++;                    
-                    PlayersManager.instance().switchServices(this._playerIds);
-                }
-            }
-            ScoreBoard.instance().show();
+                Set _set = new Set();              
+                this._setsToPlay.Add(_set);
+                ScoreBoard.instance().show();
+                _set.play(this._playerIds);                
+                this._currentSetIndex++;                    
+                PlayersManager.instance().switchService(this._playerIds);               
+            } while (this._currentSetIndex < this._setsToPlay.Capacity);            
         }
 
-        private void _config()
+        private bool _isValidConfig()
         {
-            this._setsToPlay = new Set[this._readSetsNum()];
+            return PlayersManager.instance().hasPlayers() && (this._setsToPlay.Count == 3 || this._setsToPlay.Count == 5) && this._playerIds.Length == 2;
+        }
+
+        public void readConfig()
+        {
+            this._setsToPlay = new List<Set>(this._readSetsNum());
             this._playerIds = this._readIds();
+            Console.WriteLine("Configured Match !!\n");
         }
 
         private int _readSetsNum()
         {
-            Console.WriteLine("createMatch: ");
-            Console.Write("sets: ");
-            string _sets = Console.ReadLine();
-            int _numSets = 0;
-            try
+            Console.WriteLine("createMatch: ");            
+            int _numSets = 0;            
+            while (_numSets != this._sets(3) && _numSets != this._sets(5))
             {
-                _numSets = int.Parse(_sets);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("invalid sets number");
+                try
+                {
+                    Console.Write("sets: ");
+                    string _sets = Console.ReadLine();
+                    _numSets = int.Parse(_sets);
+                    if (_numSets != this._sets(3) || _numSets != this._sets(5))
+                    {
+                        Console.WriteLine("invalid sets number. Should be 3 or 5.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("invalid sets number. Should be 3 or 5.");
+                }
             }
             return _numSets;
+        }
+
+        private int _sets(int numSets)
+        {
+            return numSets;
         }
 
         private int[] _readIds()
         {
             Console.Write("ids: ");
             string _ids = Console.ReadLine();
-            string[] _idsChunks = Console.ReadLine().Split(',');
+            string[] _idsChunks = _ids.Split(',');
             List<int> idsArray = new List<int>();
-            if (_idsChunks.Length == 2)
+            if (_idsChunks.Length == this._idsCount(2))
             {
                 foreach (string ids in _idsChunks)
                 {
                     idsArray.Add(int.Parse(ids));
                 }
-                if (idsArray.Count != 2)
+                if (idsArray.Count != this._idsCount(2))
                 {
-                    Console.WriteLine("Invalid ids number");
+                    Console.WriteLine("Invalid ids number. Should be 2");
                 }
             }
             else
             {
-                Console.WriteLine("Invalid ids number");
+                Console.WriteLine("Invalid ids number. Should be 2");
             }
             return idsArray.ToArray();
+        }     
+        
+        private int _idsCount(int count)
+        {
+            return count;
         }
 
-        internal string toString()
+        internal string toString(bool hasLack = false)
         {
             string result = "";
-            foreach (int id in _playerIds)
-            {                
-                foreach (Set _set in this._setsToPlay)
+            foreach (int idPlayer in _playerIds)
+            {
+                result += PlayersManager.instance().getPlayerById(idPlayer).toString(hasLack);
+                for (int i = 0; i < this._setsToPlay.Capacity; i++)
                 {
-                    result += _set.toString(id);
+                    result += this._toStringSet(i, idPlayer);
                 }
+                result += "\n";
+            }            
+            return result;
+        }
+
+        private string _toStringSet(int setIndex, int idPlayer)
+        {
+            string result = "";
+            if (this._setsToPlay.Count > 0 && setIndex < this._setsToPlay.Count)
+            {
+                Set _set = this._setsToPlay[setIndex];
+                if (setIndex == this._currentSetIndex)
+                {
+                    result += _set.toStringGamePoints(idPlayer);
+                }
+                result += _set.toString(idPlayer);
             }
+            else
+            {
+                result += " -";
+            }                
             return result;
         }
     }

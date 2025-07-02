@@ -10,15 +10,13 @@ namespace tennis
     {
         private int _id;
         private string _name;
-        private bool _service;
-        private bool _fault;
+        private bool _service;        
 
         public Player(string name, int id)
         {
             this._id = id;
             this._name = name;
-            this._service = false;
-            this._fault = false;
+            this._service = false;            
         }       
 
         internal void switchService()
@@ -29,35 +27,19 @@ namespace tennis
         internal bool hasService()
         {
             return this._service;
-        }
-        
-        internal bool hasFirstFault()
-        {
-            return this._fault;
-        }
+        }              
 
-        internal void activateFault()
+        internal string toString(bool hasLack)
         {
-            this._fault = true;
-        }
-
-        internal void DesactiveFault()
-        {
-            this._fault = false;
-        }
-
-        internal string toString()
-        {
-            string result = "";
-            if (this.hasService())
+            string result = "   ";
+            if (hasLack && this.hasService())
             {
-                result = "* ";
-            }
-            if (this.hasFirstFault())
+                result = " + ";
+            } else if (this.hasService())
             {
-                result = "+ ";
-            }
-            result += this._name + " : ";
+                result = " * ";
+            }            
+            result += this._id + ". " + this._name + " : ";
             return result;
         }
     }

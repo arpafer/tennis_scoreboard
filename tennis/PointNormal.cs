@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace tennis
 {
-    internal class Point
+    internal class PointNormal
     {
         internal const int ZERO = 0;
         internal const int FIFTEEN = 1;
@@ -18,36 +18,44 @@ namespace tennis
 
         private int _currentPoint;
 
-        internal Point()
+        internal PointNormal()
         {
             this._currentPoint = ZERO;
         }
 
-        internal void add()
+        internal void add(PointNormal other)
         {
             switch (this._currentPoint)
             {
                 case ZERO: this._currentPoint = FIFTEEN; break;
                 case FIFTEEN: this._currentPoint = THIRTY; break;
                 case THIRTY: this._currentPoint = FORTY; break;
-                case FORTY: this._currentPoint = AD; break;
-                case AD: this._currentPoint = WIN; break;
+                case FORTY:
+                    if (other._currentPoint == AD)
+                    {
+                        this._currentPoint = other._currentPoint = FORTY;
+                    } else 
+                       this._currentPoint = AD; 
+                    break;
+                case AD:                     
+                    this._currentPoint = WIN; 
+                    break;
             }
         }
 
         internal bool isDeuceWinner()
         {
-            return this._currentPoint == Point.WIN;
+            return this._currentPoint == PointNormal.WIN;
         }
 
         internal bool hasAd()
         {
-            return this._currentPoint == Point.AD;
+            return this._currentPoint == PointNormal.AD;
         }
 
-        internal bool hasWonTo(Point other)
+        internal bool hasWonTo(PointNormal other)
         {
-            return this._currentPoint == Point.WIN || (this._currentPoint == Point.AD && other._currentPoint < FORTY);
+            return this._currentPoint == PointNormal.WIN || (this._currentPoint == PointNormal.AD && other._currentPoint < FORTY);
         }
 
         internal string toString()

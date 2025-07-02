@@ -12,7 +12,7 @@ using System.Collections;
 
 namespace tennis
 {
-    internal class PlayersManager
+    public class PlayersManager
     {
         private Hashtable _players;
         private static PlayersManager _instance;
@@ -22,7 +22,7 @@ namespace tennis
             this._players = new Hashtable();
         }
 
-        internal static PlayersManager instance()
+        public static PlayersManager instance()
         {
             if (_instance == null)
             {
@@ -58,7 +58,7 @@ namespace tennis
             (this._players[ids[new Random().Next(2)]] as Player).switchService();
         }
 
-        public void switchServices(int []ids)
+        public void switchService(int []ids)
         {
             Debug.Assert(ids.Length == 2, "The number of ids must be two");
             foreach (int id in ids)
@@ -70,6 +70,11 @@ namespace tennis
         internal Player getPlayerById(int id)
         {
             return (this._players[id] as Player);
+        }
+
+        internal bool hasPlayers()
+        {
+            return this._players.Count > 1;
         }
     }
 }

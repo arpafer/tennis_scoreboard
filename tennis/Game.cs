@@ -23,13 +23,12 @@ namespace tennis
         {
             bool finished = false;
             while (!finished)
-            {
+            {                
                 int option = this._selectAction();
                 switch (option)
                 {
                     case POINT_OF_SERVICE:
-                        this._addServicePoints();
-                        ScoreBoard.instance().show();
+                        this._addServicePoints();                        
                         break;
                     case LACK_OF_SERVICE:
                         if (this._isServiceLack)
@@ -39,15 +38,15 @@ namespace tennis
                         }
                         else
                         {
-                            this._isServiceLack = true;
-                        }
-                        ScoreBoard.instance().show();
+                            this._isServiceLack = true;                            
+                        }                        
                         break;
-                    case POINT_OF_REST: this._addRestPoints();
-                        ScoreBoard.instance().show();
+                    case POINT_OF_REST: this._addRestPoints();                        
                         break;
-                }
-                finished = this._hasWinner();
+                }                
+                finished = this._hasWinner();     
+                if (!finished)
+                   ScoreBoard.instance().show(this._isServiceLack);
             }
         }
 
@@ -56,7 +55,7 @@ namespace tennis
             bool correct = false;
             while (!correct)
             {
-                Console.Write("Introduce one action (1. Point of Service, 2. Lack of Service, 3. Point of rest) : ");
+                Console.Write("Introduce an action (1. Point of Service, 2. Lack of Service, 3. Point of rest) : ");
                 string option = Console.ReadLine();
                 try
                 {
@@ -68,12 +67,12 @@ namespace tennis
                 }
             }
             return 0;
-        }
+        }             
 
         internal string toString(int id)
         {
             Player _player = PlayersManager.instance().getPlayerById(id);
-            string output = _player.toString();
+            string output = "";
             if (_player.hasService())
             {
                 output += this._servicePointsToString();
