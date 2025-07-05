@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 namespace tennis
 {
     internal class GameNormal: Game
-    {
-        private PointNormal _servicePoints;
-        private PointNormal _restPoints;
-
-
-        internal GameNormal() : base()
+    {      
+        internal GameNormal(EventListener scoreboard, int[] idPlayers) : base(scoreboard, idPlayers)
         {
             this.init();
         }
@@ -23,24 +19,24 @@ namespace tennis
             this._restPoints = new PointNormal();
         }
 
-        internal bool isWinnerService()
+        internal override bool isWinnerService()
         {
-            return this._servicePoints.hasWonTo(this._restPoints) || this._servicePoints.isDeuceWinner();
+            return this._servicePoints.hasWonTo(this._restPoints) || (this._servicePoints as PointNormal).isDeuceWinner();
         }        
 
         protected override void _addServicePoints()
         {
-            this._servicePoints.add(this._restPoints);
+            (this._servicePoints as PointNormal).add(this._restPoints as PointNormal);
         }
 
         protected override void _addRestPoints()
         {
-            this._restPoints.add(this._servicePoints);
+            (this._restPoints as PointNormal).add(this._servicePoints as PointNormal);
         }
 
         protected override bool _hasWinner()
         {
-            return this._servicePoints.isDeuceWinner() || this._restPoints.isDeuceWinner() || this._servicePoints.hasWonTo(this._restPoints) || this._restPoints.hasWonTo(this._servicePoints);
+            return ((this._servicePoints as PointNormal).isDeuceWinner() || (this._restPoints as PointNormal).isDeuceWinner() || this._servicePoints.hasWonTo(this._restPoints) || this._restPoints.hasWonTo(this._servicePoints));
         }
 
         protected override string _servicePointsToString()

@@ -7,21 +7,19 @@ using System.Threading.Tasks;
 
 namespace tennis
 {
-    internal class PointNormal
+    internal class PointNormal: Point
     {
         internal const int ZERO = 0;
         internal const int FIFTEEN = 1;
         internal const int THIRTY = 2;
         internal const int FORTY = 3;
         internal const int AD = 4;
-        internal const int WIN = 5;
-
-        private int _currentPoint;
+        internal const int WIN = 5;        
 
         internal PointNormal()
         {
             this._currentPoint = ZERO;
-        }
+        }        
 
         internal void add(PointNormal other)
         {
@@ -53,12 +51,12 @@ namespace tennis
             return this._currentPoint == PointNormal.AD;
         }
 
-        internal bool hasWonTo(PointNormal other)
+        internal override bool hasWonTo(Point other)
         {
-            return this._currentPoint == PointNormal.WIN || (this._currentPoint == PointNormal.AD && other._currentPoint < FORTY);
+            return this._currentPoint == PointNormal.WIN || (this._currentPoint == PointNormal.AD && other.currentPoint < FORTY);
         }
 
-        internal string toString()
+        internal override string toString()
         {
             string result = "";
             switch (this._currentPoint)
@@ -70,6 +68,6 @@ namespace tennis
                 case AD: result = "AD"; break;
             }
             return result;
-        }
+        }       
     }
 }

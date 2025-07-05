@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 namespace tennis
 {
     internal class Tiebreak: Game
-    {
-        private PointTiebreak _servicePoints;
-        private PointTiebreak _restPoints;
-
-        internal Tiebreak()
+    {        
+        internal Tiebreak(EventListener scoreboard, int[] idPlayers) : base(scoreboard, idPlayers)
         {
             this._servicePoints = new PointTiebreak();
             this._restPoints = new PointTiebreak();
@@ -19,12 +16,12 @@ namespace tennis
 
         protected override void _addRestPoints()
         {
-            this._restPoints.add();
+            (this._restPoints as PointTiebreak).add();
         }
 
         protected override void _addServicePoints()
         {
-            this._servicePoints.add();
+            (this._servicePoints as PointTiebreak).add();
         }
 
         protected override bool _hasWinner()
@@ -42,7 +39,7 @@ namespace tennis
             return this._servicePoints.toString();
         }
 
-        internal bool isWinnerService()
+        internal override bool isWinnerService()
         {
             return this._servicePoints.hasWonTo(this._restPoints);
         }

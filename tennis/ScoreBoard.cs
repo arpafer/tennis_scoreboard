@@ -7,31 +7,46 @@ using System.Threading.Tasks;
 
 namespace tennis
 {
-    public class ScoreBoard
+    public class ScoreBoard: EventListener
     {
-        private static ScoreBoard _instance;
+        // private static ScoreBoard _instance;
         private Match _match;
 
-        private ScoreBoard()
+        public ScoreBoard()
         {
-            _instance = null;
+         //   _instance = null;
         }
 
-        public static ScoreBoard instance()
+  /*      public static ScoreBoard instance()
         {
             if (_instance == null)
             {
                 _instance = new ScoreBoard();
             }
             return _instance;
-        }
+        }  */
 
         public void set(Match match)
         {
             this._match = match;
         }
 
-        internal void show(bool hasLack = false)
+        public void update(EventType eventType)
+        {
+            switch (eventType)
+            {
+                case EventType.LACK_OF_SERVICE:
+                    this._show(true); break;
+                case EventType.END_GAME:
+                    Console.WriteLine("GAME BALL !!!\n"); break;
+                case EventType.END_SET:
+                    Console.WriteLine("SET BALL !!!\n"); break;
+                default:
+                    this._show(); break;
+            }                
+        }
+
+        private void _show(bool hasLack = false)
         {
             Console.WriteLine(this._match.toString(hasLack));
         }

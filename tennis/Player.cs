@@ -19,6 +19,11 @@ namespace tennis
             this._service = false;            
         }       
 
+        internal bool hasIdEqualTo(Player player)
+        {
+            return this._id == player._id;
+        }
+
         internal void switchService()
         {
             this._service = !this._service;

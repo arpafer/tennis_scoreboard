@@ -14,29 +14,35 @@ namespace tennis
         private int _currentSetIndex;        
         private int[] _playerIds;
         private List<Set> _setsToPlay;
+        private EventListener _scoreboard;
 
-        public Match()
+        public Match(EventListener scoreboard)
         {
             this._currentSetIndex = 0;
             this._playerIds = new int[0];
             this._setsToPlay = new List<Set>();
+            this._scoreboard = scoreboard;
         }       
 
         public void play()
         {         
             Debug.Assert(this._isValidConfig(), "Match not set yet");
 
-            ScoreBoard.instance().set(this);
+            //  ScoreBoard.instance().set(this);
+            // this._scoreboard.update(EventType.START_MATCH);
             PlayersManager.instance().setInitialRandomService(this._playerIds);            
             do
             {
-                Set _set = new Set();              
+                Set _set = new Set(this._scoreboard);              
                 this._setsToPlay.Add(_set);
-                ScoreBoard.instance().show();
-                _set.play(this._playerIds);                
+                //  ScoreBoard.instance().show();
+                this._scoreboard.update(EventType.START_SET);
+                _set.play(this._playerIds);
+                this._scoreboard.update(EventType.END_SET);
                 this._currentSetIndex++;                    
                 PlayersManager.instance().switchService(this._playerIds);               
-            } while (this._currentSetIndex < this._setsToPlay.Capacity);            
+            } while (this._currentSetIndex < this._setsToPlay.Capacity);
+            this._scoreboard.update(EventType.END_MATCH);
         }
 
         private bool _isValidConfig()
@@ -115,6 +121,8 @@ namespace tennis
             foreach (int idPlayer in _playerIds)
             {
                 result += PlayersManager.instance().getPlayerById(idPlayer).toString(hasLack);
+                Set _set = this._setsToPlay[this._currentSetIndex];
+                result += _set.toStringGamePoints(idPlayer);
                 for (int i = 0; i < this._setsToPlay.Capacity; i++)
                 {
                     result += this._toStringSet(i, idPlayer);
@@ -126,15 +134,11 @@ namespace tennis
 
         private string _toStringSet(int setIndex, int idPlayer)
         {
-            string result = "";
+            string result = "";            
             if (this._setsToPlay.Count > 0 && setIndex < this._setsToPlay.Count)
             {
-                Set _set = this._setsToPlay[setIndex];
-                if (setIndex == this._currentSetIndex)
-                {
-                    result += _set.toStringGamePoints(idPlayer);
-                }
-                result += _set.toString(idPlayer);
+                Set _set = this._setsToPlay[setIndex];                
+                result += " " + _set.toString(idPlayer);
             }
             else
             {

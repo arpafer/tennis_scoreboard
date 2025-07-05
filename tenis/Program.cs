@@ -2,7 +2,9 @@
 using tennis;
 
 PlayersManager.instance().registerTournamentPlayers();
-Match match = new Match();
+ScoreBoard scoreBoard = new ScoreBoard();
+Match match = new Match(scoreBoard);
+scoreBoard.set(match);
 match.readConfig();
 match.play();
 
