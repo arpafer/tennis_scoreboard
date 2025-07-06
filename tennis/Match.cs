@@ -118,12 +118,12 @@ namespace tennis
             string result = "";
             foreach (int idPlayer in _playerIds)
             {
-                result += PlayersManager.instance().getPlayerById(idPlayer).toString(hasLack);
+                result += PlayersManager.instance().getPlayerById(idPlayer).toString(hasLack).PadRight(25);
                 Set _set = this._setsToPlay[this._currentSetIndex];
-                result += _set.toStringGamePoints(idPlayer);
+                result += _set.toStringGamePoints(idPlayer).PadRight(5);
                 for (int i = 0; i < this._setsToPlay.Capacity; i++)
                 {
-                    result += this._toStringSet(i, idPlayer);
+                    result += this._toStringSet(i, idPlayer).PadRight(5);
                 }
                 result += "\n";
             }            
