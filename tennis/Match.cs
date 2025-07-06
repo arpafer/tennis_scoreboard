@@ -14,9 +14,10 @@ namespace tennis
         private int _currentSetIndex;        
         private int[] _playerIds;
         private List<Set> _setsToPlay;
-        private EventListener _scoreboard;
+        private IScoreBoard _scoreboard;
+        private const int MAX_PLAYERS_PER_MATCH = 2;
 
-        public Match(EventListener scoreboard)
+        public Match(IScoreBoard scoreboard)
         {
             this._currentSetIndex = 0;
             this._playerIds = new int[0];
@@ -26,10 +27,7 @@ namespace tennis
 
         public void play()
         {         
-            Debug.Assert(this._isValidConfig(), "Match not set yet");
-
-            //  ScoreBoard.instance().set(this);
-            // this._scoreboard.update(EventType.START_MATCH);
+            Debug.Assert(this._isValidConfig(), "Match not set yet");           
             PlayersManager.instance().setInitialRandomService(this._playerIds);            
             do
             {
@@ -38,9 +36,8 @@ namespace tennis
                 //  ScoreBoard.instance().show();
                 this._scoreboard.update(EventType.START_SET);
                 _set.play(this._playerIds);
-                this._scoreboard.update(EventType.END_SET);
-                this._currentSetIndex++;                    
-                PlayersManager.instance().switchService(this._playerIds);               
+                this._currentSetIndex++;
+                this._scoreboard.update(EventType.END_SET);                                                 
             } while (this._currentSetIndex < this._setsToPlay.Capacity);
             this._scoreboard.update(EventType.END_MATCH);
         }
@@ -92,13 +89,19 @@ namespace tennis
             string _ids = Console.ReadLine();
             string[] _idsChunks = _ids.Split(',');
             List<int> idsArray = new List<int>();
-            if (_idsChunks.Length == this._idsCount(2))
+            if (_idsChunks.Length == MAX_PLAYERS_PER_MATCH)
             {
-                foreach (string ids in _idsChunks)
+                foreach (string _id in _idsChunks)
                 {
-                    idsArray.Add(int.Parse(ids));
+                    if (PlayersManager.instance().contains(int.Parse(_id))) 
+                    {
+                        idsArray.Add(int.Parse(_id));
+                    } else
+                    {
+                        Console.WriteLine("Invalid id " + _ids);
+                    }
                 }
-                if (idsArray.Count != this._idsCount(2))
+                if (idsArray.Count != MAX_PLAYERS_PER_MATCH)
                 {
                     Console.WriteLine("Invalid ids number. Should be 2");
                 }
@@ -108,12 +111,7 @@ namespace tennis
                 Console.WriteLine("Invalid ids number. Should be 2");
             }
             return idsArray.ToArray();
-        }     
-        
-        private int _idsCount(int count)
-        {
-            return count;
-        }
+        }                    
 
         internal string toString(bool hasLack = false)
         {
@@ -133,17 +131,16 @@ namespace tennis
         }
 
         private string _toStringSet(int setIndex, int idPlayer)
-        {
+        {           
             string result = "";            
             if (this._setsToPlay.Count > 0 && setIndex < this._setsToPlay.Count)
             {
                 Set _set = this._setsToPlay[setIndex];                
                 result += " " + _set.toString(idPlayer);
-            }
-            else
+            } else
             {
                 result += " -";
-            }                
+            }                     
             return result;
         }
     }

@@ -76,5 +76,17 @@ namespace tennis
         {
             return this._players.Count > 1;
         }
+
+        internal bool contains(int idPlayerToSearch)
+        {            
+            foreach (Player _player in this._players.Values)
+            {               
+               if (_player.hasIdEqualTo(idPlayerToSearch))
+                {
+                    return true;
+                }            
+            }
+            return false;
+        }
     }
 }

@@ -16,6 +16,7 @@ namespace tennis
         END_SET = 6,
         END_MATCH = 7,
         END_GAME = 8,
-        UPDATE_SET = 9
+        UPDATE_SET = 9,
+        TIEBREAK = 10
     }
 }

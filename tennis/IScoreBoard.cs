@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace tennis
 {
-    public interface EventListener
+    public interface IScoreBoard
     {
         void update(EventType eventType);
     }

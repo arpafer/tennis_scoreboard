@@ -8,7 +8,12 @@ namespace tennis
 {
     internal class Tiebreak: Game
     {        
-        internal Tiebreak(EventListener scoreboard, int[] idPlayers) : base(scoreboard, idPlayers)
+        internal Tiebreak(IScoreBoard scoreboard, int[] idPlayers) : base(scoreboard, idPlayers)
+        {
+            this.init();
+        }
+
+        internal void init()
         {
             this._servicePoints = new PointTiebreak();
             this._restPoints = new PointTiebreak();

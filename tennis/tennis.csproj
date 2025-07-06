@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventListener.cs" />
+    <Compile Include="IScoreBoard.cs" />
     <Compile Include="EventType.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameNormal.cs" />

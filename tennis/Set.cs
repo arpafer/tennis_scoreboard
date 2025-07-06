@@ -15,12 +15,12 @@ namespace tennis
         private Dictionary<int, int> _pointsPerPlayer;      
         private bool _hasWinner;
         private Tiebreak _tiebreak;
-        private EventListener _scoreboard;
+        private IScoreBoard _scoreboard;
 
         private const int DIFF_GAMES_FOR_WIN = 2;
         private const int MIN_GAMES_FOR_WIN = 6;
 
-        internal Set(EventListener scoreboard)
+        internal Set(IScoreBoard scoreboard)
         {            
             this._gamesNormal = new List<GameNormal>();
             this._pointsPerPlayer = new Dictionary<int, int>();
@@ -34,10 +34,12 @@ namespace tennis
             {                
                 if (this._isTiebreak())
                 {
+                    this._scoreboard.update(EventType.TIEBREAK);
                     this._tiebreak = new Tiebreak(this._scoreboard, playersIds);
                     this._tiebreak.play();
-                    this._updateSetPoints(this._tiebreak);
-                    _hasWinner = this._hasTiebreakWinner(_tiebreak);                    
+                    this._updateSetPoints(this._tiebreak);                    
+                    _hasWinner = true;                    
+                    this._tiebreak.init();
                 } else
                 {
                     GameNormal _game = new GameNormal(this._scoreboard, playersIds);
@@ -49,8 +51,10 @@ namespace tennis
                 }
                 PlayersManager.instance().switchService(playersIds);
                 this._scoreboard.update(EventType.UPDATE_SET);
-            } while (!_hasWinner);            
+            } while (!_hasWinner);                        
         }
+
+
 
         private void _updateSetPoints(Game game)
         {
@@ -130,14 +134,14 @@ namespace tennis
             }            
             Game lastGame = this._gamesNormal[this._gamesNormal.Count - 1];
             Player _playerWithServiceInLastGame = lastGame.getServicePlayer();
-            if (_playerToString.hasIdEqualTo(_playerWithServiceInLastGame))
-            {
-                result += (this._isStarting()) ? "-" : this._getPointsOfPlayer(idPlayer).ToString();
-            }
-            else
-            {
-                result += (this._isStarting()) ? "-" : this._getPointsOfPlayer(idPlayer).ToString();
-            }            
+         //   if (_playerToString.hasIdEqualTo(_playerWithServiceInLastGame))
+           // {
+                result += this._getPointsOfPlayer(idPlayer).ToString();
+         //   }
+         //   else
+         //   {
+           //     result += (this._isStarting()) ? "-" : this._getPointsOfPlayer(idPlayer).ToString();
+           // }            
             return result;            
         }
 
@@ -158,7 +162,7 @@ namespace tennis
         {
             string result = "";
             Player _player = PlayersManager.instance().getPlayerById(idPlayer);
-            if (this._isTiebreak())
+            if (this._tiebreak != null)
             {
                 result = this._tiebreak.toString(idPlayer) + "  ";
             }

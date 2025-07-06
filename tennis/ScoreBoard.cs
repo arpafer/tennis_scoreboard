@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace tennis
 {
-    public class ScoreBoard: EventListener
+    public class ScoreBoard: IScoreBoard
     {
         // private static ScoreBoard _instance;
         private Match _match;
@@ -41,6 +41,8 @@ namespace tennis
                     Console.WriteLine("GAME BALL !!!\n"); break;
                 case EventType.END_SET:
                     Console.WriteLine("SET BALL !!!\n"); break;
+                case EventType.TIEBREAK:
+                    Console.WriteLine("TIEBREAK !!!\n"); break;
                 default:
                     this._show(); break;
             }                

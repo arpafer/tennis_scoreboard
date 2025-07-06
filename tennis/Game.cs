@@ -12,11 +12,11 @@ namespace tennis
         protected Point _servicePoints;
         protected Point _restPoints;
         protected bool _isServiceLack;              
-        private EventListener _scoreboard;
+        private IScoreBoard _scoreboard;
         private int _idServicePlayer;
         private int _idRestPlayer;        
 
-        internal Game(EventListener scoreboard, int[] idPlayers)
+        internal Game(IScoreBoard scoreboard, int[] idPlayers)
         {
             this._isServiceLack = false;
             this._scoreboard = scoreboard;

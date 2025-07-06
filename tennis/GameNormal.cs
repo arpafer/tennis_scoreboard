@@ -8,7 +8,7 @@ namespace tennis
 {
     internal class GameNormal: Game
     {      
-        internal GameNormal(EventListener scoreboard, int[] idPlayers) : base(scoreboard, idPlayers)
+        internal GameNormal(IScoreBoard scoreboard, int[] idPlayers) : base(scoreboard, idPlayers)
         {
             this.init();
         }
