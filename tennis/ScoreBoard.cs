@@ -8,23 +8,8 @@ using System.Threading.Tasks;
 namespace tennis
 {
     public class ScoreBoard: IScoreBoard
-    {
-        // private static ScoreBoard _instance;
-        private Match _match;
-
-        public ScoreBoard()
-        {
-         //   _instance = null;
-        }
-
-  /*      public static ScoreBoard instance()
-        {
-            if (_instance == null)
-            {
-                _instance = new ScoreBoard();
-            }
-            return _instance;
-        }  */
+    {        
+        private Match _match;       
 
         public void set(Match match)
         {
@@ -43,6 +28,9 @@ namespace tennis
                     Console.WriteLine("SET BALL !!!\n"); break;
                 case EventType.TIEBREAK:
                     Console.WriteLine("TIEBREAK !!!\n"); break;
+                case EventType.END_MATCH:
+                    Console.WriteLine("END MATCH !!!\n"); 
+                    break;
                 default:
                     this._show(); break;
             }                

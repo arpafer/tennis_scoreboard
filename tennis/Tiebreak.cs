@@ -15,38 +15,38 @@ namespace tennis
 
         internal void init()
         {
-            this._servicePoints = new PointTiebreak();
-            this._restPoints = new PointTiebreak();
+            this._servicePoint = new PointTiebreak();
+            this._restPoint = new PointTiebreak();
         }
 
-        protected override void _addRestPoints()
+        protected override void _addRestPoint()
         {
-            (this._restPoints as PointTiebreak).add();
+            (this._restPoint as PointTiebreak).add();
         }
 
-        protected override void _addServicePoints()
+        protected override void _addServicePoint()
         {
-            (this._servicePoints as PointTiebreak).add();
+            (this._servicePoint as PointTiebreak).add();
         }
 
         protected override bool _hasWinner()
         {
-            return this._servicePoints.hasWonTo(this._restPoints) || this._restPoints.hasWonTo(this._servicePoints);
+            return this._servicePoint.hasWonTo(this._restPoint) || this._restPoint.hasWonTo(this._servicePoint);
         }
 
         protected override string _restPointsToString()
         {
-            return this._restPoints.toString();
+            return this._restPoint.toString();
         }
 
         protected override string _servicePointsToString()
         {
-            return this._servicePoints.toString();
+            return this._servicePoint.toString();
         }
 
         internal override bool isWinnerService()
         {
-            return this._servicePoints.hasWonTo(this._restPoints);
+            return this._servicePoint.hasWonTo(this._restPoint);
         }
     }
 }

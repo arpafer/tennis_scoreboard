@@ -50,7 +50,7 @@ namespace tennis
                     _game.init();                    
                 }
                 PlayersManager.instance().switchService(playersIds);
-                this._scoreboard.update(EventType.UPDATE_SET);
+                if (!_hasWinner) this._scoreboard.update(EventType.UPDATE_SET);
             } while (!_hasWinner);                        
         }
 

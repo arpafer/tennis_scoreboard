@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -32,13 +33,13 @@ namespace tennis
             do
             {
                 Set _set = new Set(this._scoreboard);              
-                this._setsToPlay.Add(_set);
-                //  ScoreBoard.instance().show();
+                this._setsToPlay.Add(_set);                
                 this._scoreboard.update(EventType.START_SET);
                 _set.play(this._playerIds);
                 this._currentSetIndex++;
                 this._scoreboard.update(EventType.END_SET);                                                 
             } while (this._currentSetIndex < this._setsToPlay.Capacity);
+            this._currentSetIndex--;
             this._scoreboard.update(EventType.END_MATCH);
         }
 
@@ -142,6 +143,6 @@ namespace tennis
                 result += " -";
             }                     
             return result;
-        }
+        }       
     }
 }

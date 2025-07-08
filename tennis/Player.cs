@@ -42,7 +42,7 @@ namespace tennis
         internal bool hasService()
         {
             return this._service;
-        }              
+        }                      
 
         internal string toString(bool hasLack)
         {
@@ -56,6 +56,6 @@ namespace tennis
             }            
             result += this._id + ". " + this._name + " : ";
             return result;
-        }
+        }        
     }
 }

@@ -9,8 +9,8 @@ namespace tennis
 {
     internal abstract class Game
     {
-        protected Point _servicePoints;
-        protected Point _restPoints;
+        protected Point _servicePoint;
+        protected Point _restPoint;
         protected bool _isServiceLack;              
         private IScoreBoard _scoreboard;
         private int _idServicePlayer;
@@ -55,13 +55,13 @@ namespace tennis
                 switch (option)
                 {
                     case (int)EventType.POINT_OF_SERVICE:
-                        this._addServicePoints();
+                        this._addServicePoint();
                         this._scoreboard.update(EventType.POINT_OF_SERVICE);
                         break;
                     case (int)EventType.LACK_OF_SERVICE:
                         if (this._isServiceLack)
                         {
-                            this._addRestPoints();
+                            this._addRestPoint();
                             this._isServiceLack = false;
                             this._scoreboard.update(EventType.POINT_OF_REST);
                         }
@@ -71,7 +71,7 @@ namespace tennis
                             this._scoreboard.update(EventType.LACK_OF_SERVICE);
                         }                        
                         break;
-                    case (int)EventType.POINT_OF_REST: this._addRestPoints();
+                    case (int)EventType.POINT_OF_REST: this._addRestPoint();
                         this._scoreboard.update(EventType.POINT_OF_REST);
                         break;
                 }                
@@ -114,8 +114,8 @@ namespace tennis
             return output;
         }
 
-        protected abstract void _addServicePoints();
-        protected abstract void _addRestPoints();
+        protected abstract void _addServicePoint();
+        protected abstract void _addRestPoint();
         protected abstract bool _hasWinner();
         protected abstract string _servicePointsToString();
         protected abstract string _restPointsToString();
