@@ -1,29 +1,11 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {
-      "tennis/1.0.0": {
-        "type": "project",
-        "compile": {
-          "bin/placeholder/tennis.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/tennis.dll": {}
-        }
-      }
-    }
+    "net8.0": {}
   },
-  "libraries": {
-    "tennis/1.0.0": {
-      "type": "project",
-      "path": "../tennis/tennis.csproj",
-      "msbuildProject": "../tennis/tennis.csproj"
-    }
-  },
+  "libraries": {},
   "projectFileDependencyGroups": {
-    "net8.0": [
-      "tennis >= 1.0.0"
-    ]
+    "net8.0": []
   },
   "packageFolders": {
     "C:\\Users\\Antonio\\.nuget\\packages\\": {}
@@ -51,11 +33,7 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {
-            "F:\\Users\\Antonio\\Documents\\escuelait\\CURSO_DISEÑO_SOFTWARE\\tenis\\tennis\\tennis.csproj": {
-              "projectPath": "F:\\Users\\Antonio\\Documents\\escuelait\\CURSO_DISEÑO_SOFTWARE\\tenis\\tennis\\tennis.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
