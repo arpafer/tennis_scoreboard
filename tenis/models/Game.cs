@@ -2,22 +2,25 @@
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
+using tenisApp.models;
 
 namespace tennis
 {
-    internal abstract class Game
-    {
-        protected Point _servicePoint;
-        protected Point _restPoint;
+    internal class Game
+    {        
+        protected PointsPair _pointsPair;
         protected bool _isServiceLack;              
         private IScoreBoard _scoreboard;
         private int _idServicePlayer;
-        private int _idRestPlayer;        
+        private int _idRestPlayer;
+        private GameType _gameType;
 
-        internal Game(IScoreBoard scoreboard, int[] idPlayers)
+        internal Game(IScoreBoard scoreboard, int[] idPlayers, GameType gameType)
         {
+            this._gameType = gameType;
             this._isServiceLack = false;
             this._scoreboard = scoreboard;
             if (PlayersManager.instance().getPlayerById(idPlayers[0]).hasService())
@@ -28,7 +31,20 @@ namespace tennis
             {
                 this._idServicePlayer = idPlayers[1];
                 this._idRestPlayer = idPlayers[0];
-            }            
+            }
+            this.initPointsType();
+        }
+
+        internal void initPointsType()
+        {
+            if (this._gameType == GameType.NORMAL)
+            {
+                this._pointsPair = new NormalPointsPair();
+            }
+            else
+            {
+                this._pointsPair = new TiebreakPointsPair();
+            }
         }
 
         internal Player getServicePlayer()
@@ -54,14 +70,14 @@ namespace tennis
                 int option = this._selectAction();
                 switch (option)
                 {
-                    case (int)EventType.POINT_OF_SERVICE:
-                        this._addServicePoint();
+                    case (int)EventType.POINT_OF_SERVICE:                                            
+                        this._pointsPair.addServicePoint();
                         this._scoreboard.update(EventType.POINT_OF_SERVICE);
                         break;
                     case (int)EventType.LACK_OF_SERVICE:
                         if (this._isServiceLack)
-                        {
-                            this._addRestPoint();
+                        {                            
+                            this._pointsPair.addRestPoint();
                             this._isServiceLack = false;
                             this._scoreboard.update(EventType.POINT_OF_REST);
                         }
@@ -71,11 +87,11 @@ namespace tennis
                             this._scoreboard.update(EventType.LACK_OF_SERVICE);
                         }                        
                         break;
-                    case (int)EventType.POINT_OF_REST: this._addRestPoint();
+                    case (int)EventType.POINT_OF_REST: this._pointsPair.addRestPoint();
                         this._scoreboard.update(EventType.POINT_OF_REST);
                         break;
                 }                
-                finished = this._hasWinner();                     
+                finished = this._pointsPair.hasWinner();                     
             }
             this._scoreboard.update(EventType.END_GAME);
         }
@@ -104,7 +120,7 @@ namespace tennis
             Player _player = PlayersManager.instance().getPlayerById(id);
             string output = "";
             if (_player.hasService())
-            {
+            {                
                 output += this._servicePointsToString();
             }
             else
@@ -114,12 +130,19 @@ namespace tennis
             return output;
         }
 
-        protected abstract void _addServicePoint();
-        protected abstract void _addRestPoint();
-        protected abstract bool _hasWinner();
-        protected abstract string _servicePointsToString();
-        protected abstract string _restPointsToString();
-        internal abstract bool isWinnerService();
+        internal string _servicePointsToString()
+        {
+            return this._pointsPair.toStringServicePoints();
+        }
+
+        internal string _restPointsToString()
+        {
+            return this._pointsPair.toStringRestPoints();
+        }
        
+        internal bool isWinnerService()
+        {
+            return this._pointsPair.isWinnerService();
+        }
     }
 }

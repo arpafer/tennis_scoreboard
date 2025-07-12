@@ -5,15 +5,16 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using tenisApp.models;
 
 namespace tennis
 {
     internal class Set
     {        
-        private List<GameNormal> _gamesNormal;        
+        private List<Game> _gamesNormal;        
         private Dictionary<int, int> _pointsPerPlayer;      
         private bool _hasWinner;
-        private Tiebreak _tiebreak;
+        private Game _tiebreak;
         private IScoreBoard _scoreboard;
 
         private const int DIFF_GAMES_FOR_WIN = 2;
@@ -21,7 +22,7 @@ namespace tennis
 
         internal Set(IScoreBoard scoreboard)
         {            
-            this._gamesNormal = new List<GameNormal>();
+            this._gamesNormal = new List<Game>();
             this._pointsPerPlayer = new Dictionary<int, int>();
             this._hasWinner = false;
             this._scoreboard = scoreboard;
@@ -34,27 +35,24 @@ namespace tennis
                 if (this._isTiebreak())
                 {
                     this._scoreboard.update(EventType.TIEBREAK);
-                    this._tiebreak = new Tiebreak(this._scoreboard, playersIds);
+                    this._tiebreak = new Game(this._scoreboard, playersIds, GameType.TIEBREAK);
                     this._tiebreak.play();
                     this._updateSetPoints(this._tiebreak);                    
                     _hasWinner = true;                    
-                    this._tiebreak.init();
+                    this._tiebreak.initPointsType();
                 } else
                 {
-                    GameNormal _game = new GameNormal(this._scoreboard, playersIds);
+                    Game _game = new Game(this._scoreboard, playersIds, GameType.NORMAL);
                     this._gamesNormal.Add(_game);
                     _game.play();
                     this._updateSetPoints(_game);
                     _hasWinner = this._hasSetWinner(_game);
-                    _game.init();                    
+                    _game.initPointsType();                    
                 }
-                PlayersManager.instance().switchService(playersIds);
+                PlayersManager.instance().switchService(playersIds);                
                 if (!_hasWinner) this._scoreboard.update(EventType.UPDATE_SET);
             } while (!_hasWinner);                        
-        }
-
-
-
+        }       
         private void _updateSetPoints(Game game)
         {
             int _servicePlayerId = game.getServicePlayerId();
@@ -78,7 +76,7 @@ namespace tennis
             }
         }
 
-        private bool _hasSetWinner(GameNormal gameNormal)
+        private bool _hasSetWinner(Game gameNormal)
         {
             int _servicePlayerId = gameNormal.getServicePlayerId();
             int _restPlayerId = gameNormal.getRestPlayerId();
@@ -101,7 +99,7 @@ namespace tennis
             {
                 return false;
             }
-            GameNormal gameNormal = this._gamesNormal[this._gamesNormal.Count - 1];
+            Game gameNormal = this._gamesNormal[this._gamesNormal.Count - 1];
             int _servicePlayerId = gameNormal.getServicePlayerId();
             int _restPlayerId = gameNormal.getRestPlayerId();
             return this._getPointsOfPlayer(_servicePlayerId) == MIN_GAMES_FOR_WIN && this._getPointsOfPlayer(_servicePlayerId) == this._pointsPerPlayer[_restPlayerId];
@@ -114,14 +112,7 @@ namespace tennis
                 return this._pointsPerPlayer[playerId];
             }
             return 0;
-        }
-
-        private bool _hasTiebreakWinner(Tiebreak _tiebreak)
-        {
-            int _servicePlayerId = _tiebreak.getServicePlayerId();
-            int _restPlayerId = _tiebreak.getRestPlayerId();
-            return this._somePlayerHasDiffMinGamesForWin(_servicePlayerId, _restPlayerId);            
-        }       
+        }             
      
         internal string toString(int idPlayer)
         {

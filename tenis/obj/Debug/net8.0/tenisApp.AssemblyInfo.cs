@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("tenisApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1741839894bc2b30f8890c97cc3aac8c19ef787a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7c0a08ff7bf1d4d61b3c2b0fdb83627da4b4866a")]
 [assembly: System.Reflection.AssemblyProductAttribute("tenisApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("tenisApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
