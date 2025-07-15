@@ -30,26 +30,10 @@ namespace tennis
             }
             return _instance;
         }
-
-        public void registerTournamentPlayers()
+       
+        public void setPlayers(Hashtable players)
         {
-            Console.WriteLine("Register the players: (Enter for finish)");
-            bool _exit = false;
-            int id = 1;
-            Console.WriteLine("readPlayers");
-            while (!_exit)
-            {
-                Console.Write("Name: ");
-                string name = Console.ReadLine();
-                if (String.IsNullOrEmpty(name))
-                {
-                    _exit = true;
-                } else
-                {
-                    Console.WriteLine("Name: " + name + "; id: " + id);
-                    this._players.Add(id, new Player(name, id++));
-                }
-            }            
+            this._players = players;
         }
 
         public void setInitialRandomService(int []ids)

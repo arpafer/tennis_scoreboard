@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Ezg9ljtnIWFEVpqL8y+hgOx5ur0i5SLpnUOMb0MUfGaF6rq53pr5mR8QHopToKgsGnOB7VyK50dW4V9Us8WyIg==",
+  "dgSpecHash": "bVamxkGhEjY=",
   "success": true,
-  "projectFilePath": "F:\\Users\\Antonio\\Documents\\escuelait\\CURSO_DISEÑO_SOFTWARE\\tenis\\tenis\\tenisApp.csproj",
+  "projectFilePath": "C:\\Users\\G78405210\\Documents\\EscuelaIT\\tenis_con_vistas\\tennis_scoreboard\\tenis\\tenisApp.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
