@@ -18,29 +18,27 @@ namespace tennis
         private IScoreBoard _scoreboard;
         private const int MAX_PLAYERS_PER_MATCH = 2;
 
-        public Match(IScoreBoard scoreboard)
+        public Match(IScoreBoard scoreboard, List<Set> _setsToPlay, int[] _playersIds)
         {
             this._currentSetIndex = 0;
             this._playerIds = new int[0];
             this._setsToPlay = new List<Set>();
             this._scoreboard = scoreboard;
+            PlayersManager.instance().setInitialRandomService(this._playerIds);
         }       
 
         public void play()
         {         
-            Debug.Assert(this._isValidConfig(), "Match not set yet");           
-            PlayersManager.instance().setInitialRandomService(this._playerIds);            
-            do
+            Debug.Assert(this._isValidConfig(), "Match not set yet");                       
+            Set _set = this._setsToPlay[this._currentSetIndex];
+            if (_set != null && !_set.hasEnded())
             {
-                Set _set = new Set(this._scoreboard);              
-                this._setsToPlay.Add(_set);                
-                this._scoreboard.update(EventType.START_SET);
-                _set.play(this._playerIds);
-                this._currentSetIndex++;
-                this._scoreboard.update(EventType.END_SET);                                                 
-            } while (this._currentSetIndex < this._setsToPlay.Capacity);
-            this._currentSetIndex--;
-            this._scoreboard.update(EventType.END_MATCH);
+                _set.playPoint(this._playerIds);
+            }
+            _set = new Set(this._scoreboard);
+            this._setsToPlay.Add(_set);            
+            _set.play(this._playerIds);
+            this._currentSetIndex++;                            
         }
 
         private bool _isValidConfig()

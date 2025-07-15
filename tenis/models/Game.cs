@@ -62,38 +62,28 @@ namespace tennis
             return this._idRestPlayer;
         }
 
-        internal void play()
-        {
-            bool finished = false;
-            while (!finished)
-            {                
-                int option = this._selectAction();
-                switch (option)
-                {
-                    case (int)EventType.POINT_OF_SERVICE:                                            
-                        this._pointsPair.addServicePoint();
-                        this._scoreboard.update(EventType.POINT_OF_SERVICE);
-                        break;
-                    case (int)EventType.LACK_OF_SERVICE:
-                        if (this._isServiceLack)
-                        {                            
-                            this._pointsPair.addRestPoint();
-                            this._isServiceLack = false;
-                            this._scoreboard.update(EventType.POINT_OF_REST);
-                        }
-                        else
-                        {
-                            this._isServiceLack = true;
-                            this._scoreboard.update(EventType.LACK_OF_SERVICE);
-                        }                        
-                        break;
-                    case (int)EventType.POINT_OF_REST: this._pointsPair.addRestPoint();
-                        this._scoreboard.update(EventType.POINT_OF_REST);
-                        break;
-                }                
-                finished = this._pointsPair.hasWinner();                     
-            }
-            this._scoreboard.update(EventType.END_GAME);
+        internal void playPoint(EventType eventType)
+        {                                            
+            switch (eventType)
+            {
+                case EventType.POINT_OF_SERVICE:
+                    this._pointsPair.addServicePoint();                    
+                    break;
+                case EventType.LACK_OF_SERVICE:
+                    if (this._isServiceLack)
+                    {
+                        this._pointsPair.addRestPoint();
+                        this._isServiceLack = false;                        
+                    }
+                    else
+                    {
+                        this._isServiceLack = true;                        
+                    }
+                    break;
+                case EventType.POINT_OF_REST:
+                    this._pointsPair.addRestPoint();                    
+                    break;
+            }                                
         }
 
         protected int _selectAction()

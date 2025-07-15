@@ -28,31 +28,53 @@ namespace tennis
             this._scoreboard = scoreboard;
         }
 
-        internal void play(int[] playersIds)
-        {            
-            do
+        internal void playPoint(int[] playersIds)
+        {
+            if (this._isTiebreak())
             {                
-                if (this._isTiebreak())
+                this._tiebreak = new Game(this._scoreboard, playersIds, GameType.TIEBREAK);
+                this._tiebreak.playPoint();
+                if (this._tiebreak.isEnded())
                 {
-                    this._scoreboard.update(EventType.TIEBREAK);
-                    this._tiebreak = new Game(this._scoreboard, playersIds, GameType.TIEBREAK);
-                    this._tiebreak.play();
                     this._updateSetPoints(this._tiebreak);                    
-                    _hasWinner = true;                    
                     this._tiebreak.initPointsType();
-                } else
-                {
-                    Game _game = new Game(this._scoreboard, playersIds, GameType.NORMAL);
-                    this._gamesNormal.Add(_game);
-                    _game.play();
-                    this._updateSetPoints(_game);
-                    _hasWinner = this._hasSetWinner(_game);
-                    _game.initPointsType();                    
+                    PlayersManager.instance().switchService(playersIds);
                 }
-                PlayersManager.instance().switchService(playersIds);                
-                if (!_hasWinner) this._scoreboard.update(EventType.UPDATE_SET);
-            } while (!_hasWinner);                        
-        }       
+            }
+            else
+            {
+                Game _game = new Game(this._scoreboard, playersIds, GameType.NORMAL);
+                this._gamesNormal.Add(_game);
+                _game.playPoint();
+                if (this._isEnded(_game))
+                {
+                    this._updateSetPoints(_game);                    
+                    _game.initPointsType();
+                    PlayersManager.instance().switchService(playersIds);
+                }
+            }                        
+        }   
+        
+        internal string getServicePoints()
+        {
+            Game _game = this._gamesNormal[this._gamesNormal.Count - 1];
+            if (_game != null)
+            {
+                return _game.getServicePoints();
+            }
+            return "";
+        }
+
+        internal string getRestPoints()
+        {
+            Game _game = this._gamesNormal[this._gamesNormal.Count - 1];
+            if (_game != null)
+            {
+                return _game.getRestPoints();
+            }
+            return "";
+        }
+
         private void _updateSetPoints(Game game)
         {
             int _servicePlayerId = game.getServicePlayerId();
@@ -76,7 +98,7 @@ namespace tennis
             }
         }
 
-        private bool _hasSetWinner(Game gameNormal)
+        private bool _isEnded(Game gameNormal)
         {
             int _servicePlayerId = gameNormal.getServicePlayerId();
             int _restPlayerId = gameNormal.getRestPlayerId();
