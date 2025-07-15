@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Linq;
@@ -12,24 +13,15 @@ namespace tennis
     internal class Game
     {        
         protected PointsPair _pointsPair;
-        protected bool _isServiceLack;                      
-        private int _idServicePlayer;
-        private int _idRestPlayer;
+        protected bool _isServiceLack;                              
         private GameType _gameType;
+        private Hashtable _players;
 
-        internal Game(int[] idPlayers, GameType gameType)
+        internal Game(Hashtable players, GameType gameType)
         {
             this._gameType = gameType;
-            this._isServiceLack = false;            
-            if (PlayersManager.instance().getPlayerById(idPlayers[0]).hasService())
-            {
-                this._idServicePlayer = idPlayers[0];
-                this._idRestPlayer = idPlayers[1];
-            } else
-            {
-                this._idServicePlayer = idPlayers[1];
-                this._idRestPlayer = idPlayers[0];
-            }
+            this._isServiceLack = false;
+            this._players = players;            
             this.initPointsType();
         }
 
@@ -43,21 +35,29 @@ namespace tennis
             {
                 this._pointsPair = new TiebreakPointsPair();
             }
-        }
-
-        internal Player getServicePlayer()
-        {
-            return PlayersManager.instance().getPlayerById(this._idServicePlayer);
-        }
+        }       
 
         internal int getServicePlayerId()
         {
-            return this._idServicePlayer;
+            if ((this._players[0] as Player).hasService())
+            {
+                return 0;
+            } else
+            {
+                return 1;
+            }
         }
 
         internal int getRestPlayerId()
         {
-            return this._idRestPlayer;
+            if (!(this._players[0] as Player).hasService())
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
         }
 
         internal void setPoint(EventType eventType)
@@ -71,47 +71,40 @@ namespace tennis
                     if (this._isServiceLack)
                     {
                         this._pointsPair.addRestPoint();
-                        this._isServiceLack = false;                        
+                        this._isServiceLack = false;
+                        (this._players[this.getServicePlayerId()] as Player).deactivateLack();
                     }
                     else
                     {
-                        this._isServiceLack = true;                        
+                        this._isServiceLack = true;
+                        (this._players[this.getServicePlayerId()] as Player).activateLack();
                     }
                     break;
                 case EventType.POINT_OF_REST:
                     this._pointsPair.addRestPoint();                    
                     break;
             }                                
-        }                 
-
-        internal string toString(int id)
-        {
-            Player _player = PlayersManager.instance().getPlayerById(id);
-            string output = "";
-            if (_player.hasService())
-            {                
-                output += this._servicePointsToString();
-            }
-            else
-            {
-                output += this._restPointsToString();
-            }
-            return output;
-        }
-
-        internal string _servicePointsToString()
-        {
-            return this._pointsPair.toStringServicePoints();
-        }
-
-        internal string _restPointsToString()
-        {
-            return this._pointsPair.toStringRestPoints();
-        }
+        }                                
        
         internal bool isWinnerService()
         {
             return this._pointsPair.isWinnerService();
+        }
+
+        internal string getPoints(Player player)
+        {
+            if (player.hasService())
+            {
+                return this._pointsPair.toStringServicePoints();
+            } else
+            {
+                return this._pointsPair.toStringRestPoints();
+            }
+        }
+
+        internal bool isFinished()
+        {
+            return this._pointsPair.hasWinner();
         }
     }
 }

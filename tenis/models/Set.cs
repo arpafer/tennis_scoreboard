@@ -12,8 +12,7 @@ namespace tennis
     internal class Set
     {        
         private List<Game> _gamesNormal;        
-        private Dictionary<int, int> _pointsPerPlayer;      
-        private bool _hasWinner;
+        private Dictionary<int, int> _pointsPerPlayer;              
         private Game _tiebreak;
         
         private const int DIFF_GAMES_FOR_WIN = 2;
@@ -22,55 +21,42 @@ namespace tennis
         internal Set()
         {            
             this._gamesNormal = new List<Game>();
-            this._pointsPerPlayer = new Dictionary<int, int>();
-            this._hasWinner = false;            
+            this._pointsPerPlayer = new Dictionary<int, int>();                      
         }
 
-        internal void setPoint(int[] playersIds, EventType eventType)
+        internal void setPoint(Hashtable players, EventType eventType)
         {
             if (this._isTiebreak())
             {                
-                this._tiebreak = new Game(playersIds, GameType.TIEBREAK);
+                this._tiebreak = new Game(players, GameType.TIEBREAK);
                 this._tiebreak.setPoint(eventType);
-                if (this._tiebreak.isEnded())
+                if (this._tiebreak.isFinished())
                 {
                     this._updateSetPoints(this._tiebreak);                    
                     this._tiebreak.initPointsType();
-                    PlayersManager.instance().switchService(playersIds);
+                    this._switchService(players);
                 }
             }
             else
             {
-                Game _game = new Game(playersIds, GameType.NORMAL);
+                Game _game = new Game(players, GameType.NORMAL);
                 this._gamesNormal.Add(_game);
                 _game.setPoint(eventType);
-                if (this._isEnded(_game))
+                if (this._isFinished(_game))
                 {
                     this._updateSetPoints(_game);                    
                     _game.initPointsType();
-                    PlayersManager.instance().switchService(playersIds);
+                    this._switchService(players);
                 }
             }                        
-        }   
-        
-        internal string getServicePoints()
-        {
-            Game _game = this._gamesNormal[this._gamesNormal.Count - 1];
-            if (_game != null)
-            {
-                return _game.getServicePoints();
-            }
-            return "";
-        }
+        }          
 
-        internal string getRestPoints()
+        private void _switchService(Hashtable players)
         {
-            Game _game = this._gamesNormal[this._gamesNormal.Count - 1];
-            if (_game != null)
+            foreach (Player _player in players.Values)
             {
-                return _game.getRestPoints();
+                _player.switchService();
             }
-            return "";
         }
 
         private void _updateSetPoints(Game game)
@@ -96,7 +82,7 @@ namespace tennis
             }
         }
 
-        private bool _isEnded(Game gameNormal)
+        private bool _isFinished(Game gameNormal)
         {
             int _servicePlayerId = gameNormal.getServicePlayerId();
             int _restPlayerId = gameNormal.getRestPlayerId();
@@ -105,12 +91,12 @@ namespace tennis
 
         private bool _somePlayerHasMinGamesForWin(int _servicePlayerId, int _restPlayerId)
         {
-            return this.getPointsOfPlayer(_servicePlayerId) >= MIN_GAMES_FOR_WIN || this.getPointsOfPlayer(_restPlayerId) >= MIN_GAMES_FOR_WIN;
+            return this.getPoints(_servicePlayerId) >= MIN_GAMES_FOR_WIN || this.getPoints(_restPlayerId) >= MIN_GAMES_FOR_WIN;
         }
 
         private bool _somePlayerHasDiffMinGamesForWin(int _servicePlayerId, int _restPlayerId)
         {
-           return Math.Abs(this.getPointsOfPlayer(_servicePlayerId) - this.getPointsOfPlayer(_restPlayerId)) >= DIFF_GAMES_FOR_WIN;
+           return Math.Abs(this.getPoints(_servicePlayerId) - this.getPoints(_restPlayerId)) >= DIFF_GAMES_FOR_WIN;
         }
 
         private bool _isTiebreak()
@@ -122,68 +108,38 @@ namespace tennis
             Game gameNormal = this._gamesNormal[this._gamesNormal.Count - 1];
             int _servicePlayerId = gameNormal.getServicePlayerId();
             int _restPlayerId = gameNormal.getRestPlayerId();
-            return this.getPointsOfPlayer(_servicePlayerId) == MIN_GAMES_FOR_WIN && this.getPointsOfPlayer(_servicePlayerId) == this._pointsPerPlayer[_restPlayerId];
+            return this.getPoints(_servicePlayerId) == MIN_GAMES_FOR_WIN && this.getPoints(_servicePlayerId) == this._pointsPerPlayer[_restPlayerId];
         }        
 
-        internal int getPointsOfPlayer(int playerId)
+        internal int getPoints(int playerId)
         {
             if (_pointsPerPlayer.ContainsKey(playerId))
             {
                 return this._pointsPerPlayer[playerId];
             }
             return 0;
-        }             
-     
-        internal string toString(int idPlayer)
-        {
-            string result = "";
-            Player _playerToString = PlayersManager.instance().getPlayerById(idPlayer);
-            if (this._gamesNormal.Count == 0)
-            {
-                return "-";
-            }            
-            Game lastGame = this._gamesNormal[this._gamesNormal.Count - 1];
-            Player _playerWithServiceInLastGame = lastGame.getServicePlayer();
-         //   if (_playerToString.hasIdEqualTo(_playerWithServiceInLastGame))
-           // {
-                result += this.getPointsOfPlayer(idPlayer).ToString();
-         //   }
-         //   else
-         //   {
-           //     result += (this._isStarting()) ? "-" : this._getPointsOfPlayer(idPlayer).ToString();
-           // }            
-            return result;            
         }
 
-        private bool _isStarting()
+        internal string getGamePoints(Player player)
         {
-            bool _starting = true;
-            foreach (int points in _pointsPerPlayer.Values)
-            {
-                if (points != 0)
-                {
-                    _starting = false;
-                }
-            }
-            return _starting;
+            Game _game = this._gamesNormal[this._gamesNormal.Count - 1];
+            return _game.getPoints(player);
+        }       
+
+        internal bool isFinished()
+        {
+            return (this._isTiebreak() && this._tiebreak.isFinished()) ||
+                       this._isFinished(this._gamesNormal[this._gamesNormal.Count - 1]);
         }
 
-        internal string toStringGamePoints(int idPlayer)
+        internal bool isFinishedCurrentGame()
         {
-            string result = "";
-            Player _player = PlayersManager.instance().getPlayerById(idPlayer);
-            if (this._tiebreak != null)
-            {
-                result = this._tiebreak.toString(idPlayer) + "  ";
-            }
-            else
-            {
-                if (this._gamesNormal.Count > 0)
-                    result = this._gamesNormal[this._gamesNormal.Count - 1].toString(idPlayer) + "  ";
-                else
-                    result += "0  ";
-            }
-            return result;
+            return this._gamesNormal[this._gamesNormal.Count - 1].isFinished();
+        }
+
+        internal bool isFinishedCurrentTiebreak()
+        {
+            return this._isTiebreak() && this._tiebreak.isFinished();
         }
     }
 }

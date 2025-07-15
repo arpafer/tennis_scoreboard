@@ -19,7 +19,7 @@ namespace tenisApp.Views
 
         internal void interact()
         {            
-            while (!this._match.isEndMatch())
+            while (!this._match.isFinished())
             {
                 int _option = this._selectAction();                
                 this._match.setPoint((EventType)_option);                
@@ -31,22 +31,18 @@ namespace tenisApp.Views
         internal string _toString()
         {
             string _result = "";
-            int[] _playersId = this._match.getIdPlayers();
-            foreach (int playerId in _playersId) 
+            Hashtable _players = this._match.getPlayers();
+            foreach (int _playerKey in _players.Keys) 
             {
-                _result += this._showPlayerInfo(PlayersManager.instance().getPlayerById(playerId));
-                _result += this._match.getGamePoints(playerId);
-                int _numSets = this._match.getNumSets();
-                for (int _setIndex = 0; _setIndex < _numSets; _setIndex++)
-                {
-                    _result += this._match.getSetPoints(_setIndex, playerId);
-                }
+                _result += this._showPlayerInfo(_playerKey);
+                _result += this._showSetInfo(_playerKey);                
             }
             return _result;
         }
 
-        private string _showPlayerInfo(Player player)
+        private string _showPlayerInfo(int playerKey)
         {
+            Player player = this._match.getPlayerByKey(playerKey);
             string result = "   ";
             if (player.hasLack() && player.hasService())
             {
@@ -58,6 +54,20 @@ namespace tenisApp.Views
             }
             result += player.Id + ". " + player.Name + " : ";
             return result;
+        }
+
+        private string _showSetInfo(int playerKey)
+        {
+            Player player = this._match.getPlayerByKey(playerKey);
+            string _result = "";
+            int _numSets = this._match.getNumSets();
+            int _playerId = 0;
+            for (int _setIndex = 0; _setIndex < _numSets; _setIndex++)
+            {
+                _result += this._match.getGamePoints(_setIndex, player);
+                _result += this._match.getSetPoints(_setIndex, playerKey);
+            }
+            return _result;
         }
 
         protected int _selectAction()

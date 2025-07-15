@@ -15,9 +15,9 @@ namespace tenisApp.Views
         private Match _match;
         private const int MAX_PLAYERS_PER_MATCH = 2;
 
-        public MatchConfigurator(Hashtable players, Match match)
+        public MatchConfigurator(Match match)
         {
-            this._players = players;
+            this._players = new Hashtable();
             this._match = match;
         }
 
@@ -33,29 +33,22 @@ namespace tenisApp.Views
             bool _exit = false;
             int id = 1;
             Console.WriteLine("readPlayers");
-            while (!_exit)
+            while (id <= 2)
             {
                 Console.Write("Name: ");
-                string name = Console.ReadLine();
-                if (String.IsNullOrEmpty(name))
-                {
-                    _exit = true;
-                }
-                else
-                {
-                    Console.WriteLine("Name: " + name + "; id: " + id);
-                    this._players.Add(id, new Player(name, id++));
-                }
-            }
-            PlayersManager.instance().setPlayers(this._players);
+                string name = Console.ReadLine();                
+                Console.WriteLine("Name: " + name + "; id: " + id);
+                this._players.Add(id - 1, new Player(name, id++));                
+            }            
+            // PlayersManager.instance().setPlayers(this._players);
         }
 
         private void _readMatchConfig()
         {            
-            Hashtable _setsToPlay = new Hashtable(this._readSetsNum());
-            int[] _playerIds = this._readIds();
+            List<Set> _setsToPlay = new List<Set>(this._readSetsNum());
+            // int[] _playerIds = this._readIds();
 
-            this._match = new Match(_setsToPlay, _playerIds);
+            this._match.set(_setsToPlay, this._players);
             Console.WriteLine("Configured Match !!\n");
         }
 

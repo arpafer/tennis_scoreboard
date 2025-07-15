@@ -18,19 +18,19 @@ namespace tenisApp.Views
 
         internal void interact()
         {
-            if (this._match.isEndGame())
+            if (this._match.isFinishedCurrentGame())
             {
                 Console.WriteLine("GAME BALL !!!\n");
             }
-            if (this._match.isEndSet())
+            if (this._match.isFinishedCurrentSet())
             {
                 Console.WriteLine("SET BALL !!!\n");
             }
-            if (this._match.isEndTiebreak())
+            if (this._match.isFinishedCurrentTiebreak())
             {
                 Console.WriteLine("TIEBREAK !!!\n");
             }
-            if (this._match.isEndMatch())
+            if (this._match.isFinished())
             {
                 Console.WriteLine("END MATCH !!!\n");
             }
