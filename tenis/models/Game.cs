@@ -12,17 +12,15 @@ namespace tennis
     internal class Game
     {        
         protected PointsPair _pointsPair;
-        protected bool _isServiceLack;              
-        private IScoreBoard _scoreboard;
+        protected bool _isServiceLack;                      
         private int _idServicePlayer;
         private int _idRestPlayer;
         private GameType _gameType;
 
-        internal Game(IScoreBoard scoreboard, int[] idPlayers, GameType gameType)
+        internal Game(int[] idPlayers, GameType gameType)
         {
             this._gameType = gameType;
-            this._isServiceLack = false;
-            this._scoreboard = scoreboard;
+            this._isServiceLack = false;            
             if (PlayersManager.instance().getPlayerById(idPlayers[0]).hasService())
             {
                 this._idServicePlayer = idPlayers[0];
@@ -62,7 +60,7 @@ namespace tennis
             return this._idRestPlayer;
         }
 
-        internal void playPoint(EventType eventType)
+        internal void setPoint(EventType eventType)
         {                                            
             switch (eventType)
             {
@@ -84,26 +82,7 @@ namespace tennis
                     this._pointsPair.addRestPoint();                    
                     break;
             }                                
-        }
-
-        protected int _selectAction()
-        {
-            bool correct = false;
-            while (!correct)
-            {
-                Console.Write("Introduce an action (1. Point of Service, 2. Lack of Service, 3. Point of rest) : ");
-                string option = Console.ReadLine();
-                try
-                {
-                    return int.Parse(option);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("You should enter a number from 1 to 3");
-                }
-            }
-            return 0;
-        }             
+        }                 
 
         internal string toString(int id)
         {

@@ -15,25 +15,23 @@ namespace tennis
         private Dictionary<int, int> _pointsPerPlayer;      
         private bool _hasWinner;
         private Game _tiebreak;
-        private IScoreBoard _scoreboard;
-
+        
         private const int DIFF_GAMES_FOR_WIN = 2;
         private const int MIN_GAMES_FOR_WIN = 6;
 
-        internal Set(IScoreBoard scoreboard)
+        internal Set()
         {            
             this._gamesNormal = new List<Game>();
             this._pointsPerPlayer = new Dictionary<int, int>();
-            this._hasWinner = false;
-            this._scoreboard = scoreboard;
+            this._hasWinner = false;            
         }
 
-        internal void playPoint(int[] playersIds)
+        internal void setPoint(int[] playersIds, EventType eventType)
         {
             if (this._isTiebreak())
             {                
-                this._tiebreak = new Game(this._scoreboard, playersIds, GameType.TIEBREAK);
-                this._tiebreak.playPoint();
+                this._tiebreak = new Game(playersIds, GameType.TIEBREAK);
+                this._tiebreak.setPoint(eventType);
                 if (this._tiebreak.isEnded())
                 {
                     this._updateSetPoints(this._tiebreak);                    
@@ -43,9 +41,9 @@ namespace tennis
             }
             else
             {
-                Game _game = new Game(this._scoreboard, playersIds, GameType.NORMAL);
+                Game _game = new Game(playersIds, GameType.NORMAL);
                 this._gamesNormal.Add(_game);
-                _game.playPoint();
+                _game.setPoint(eventType);
                 if (this._isEnded(_game))
                 {
                     this._updateSetPoints(_game);                    
@@ -107,12 +105,12 @@ namespace tennis
 
         private bool _somePlayerHasMinGamesForWin(int _servicePlayerId, int _restPlayerId)
         {
-            return this._getPointsOfPlayer(_servicePlayerId) >= MIN_GAMES_FOR_WIN || this._getPointsOfPlayer(_restPlayerId) >= MIN_GAMES_FOR_WIN;
+            return this.getPointsOfPlayer(_servicePlayerId) >= MIN_GAMES_FOR_WIN || this.getPointsOfPlayer(_restPlayerId) >= MIN_GAMES_FOR_WIN;
         }
 
         private bool _somePlayerHasDiffMinGamesForWin(int _servicePlayerId, int _restPlayerId)
         {
-           return Math.Abs(this._getPointsOfPlayer(_servicePlayerId) - this._getPointsOfPlayer(_restPlayerId)) >= DIFF_GAMES_FOR_WIN;
+           return Math.Abs(this.getPointsOfPlayer(_servicePlayerId) - this.getPointsOfPlayer(_restPlayerId)) >= DIFF_GAMES_FOR_WIN;
         }
 
         private bool _isTiebreak()
@@ -124,10 +122,10 @@ namespace tennis
             Game gameNormal = this._gamesNormal[this._gamesNormal.Count - 1];
             int _servicePlayerId = gameNormal.getServicePlayerId();
             int _restPlayerId = gameNormal.getRestPlayerId();
-            return this._getPointsOfPlayer(_servicePlayerId) == MIN_GAMES_FOR_WIN && this._getPointsOfPlayer(_servicePlayerId) == this._pointsPerPlayer[_restPlayerId];
+            return this.getPointsOfPlayer(_servicePlayerId) == MIN_GAMES_FOR_WIN && this.getPointsOfPlayer(_servicePlayerId) == this._pointsPerPlayer[_restPlayerId];
         }        
 
-        private int _getPointsOfPlayer(int playerId)
+        internal int getPointsOfPlayer(int playerId)
         {
             if (_pointsPerPlayer.ContainsKey(playerId))
             {
@@ -148,7 +146,7 @@ namespace tennis
             Player _playerWithServiceInLastGame = lastGame.getServicePlayer();
          //   if (_playerToString.hasIdEqualTo(_playerWithServiceInLastGame))
            // {
-                result += this._getPointsOfPlayer(idPlayer).ToString();
+                result += this.getPointsOfPlayer(idPlayer).ToString();
          //   }
          //   else
          //   {

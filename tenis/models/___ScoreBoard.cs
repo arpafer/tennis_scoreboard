@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace tennis
 {
-    public class ScoreBoard: IScoreBoard
+    public class ___ScoreBoard: IScoreBoard
     {        
         private Match _match;       
 

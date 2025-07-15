@@ -24,7 +24,7 @@ namespace tenisApp.Views
         internal void interact()
         {
             this._registerTournamentPlayers();
-            this._readMatchConfig();
+            this._readMatchConfig();            
         }
 
         private void _registerTournamentPlayers()
@@ -47,11 +47,12 @@ namespace tenisApp.Views
                     this._players.Add(id, new Player(name, id++));
                 }
             }
+            PlayersManager.instance().setPlayers(this._players);
         }
 
         private void _readMatchConfig()
         {            
-            List<Set> _setsToPlay = new List<Set>(this._readSetsNum());
+            Hashtable _setsToPlay = new Hashtable(this._readSetsNum());
             int[] _playerIds = this._readIds();
 
             this._match = new Match(_setsToPlay, _playerIds);

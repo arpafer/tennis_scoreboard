@@ -7,10 +7,10 @@ using tennis;
 //ScoreBoard scoreBoard = new ScoreBoard();
 Match match = new Match();
 Hashtable players = new Hashtable();
-MatchConfigurator matchConfig = new MatchConfigurator(players, match);
-matchConfig.interact();
+MatchConfigurator matchConfigView = new MatchConfigurator(players, match);
+matchConfigView.interact();
 
-scoreBoard.set(match);
-match.readConfig();
-match.play();
+ScoreBoard scoreBoard = new ScoreBoard(match);
+
+
 

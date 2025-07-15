@@ -31,54 +31,45 @@ namespace tennis
             PlayersManager.instance().setInitialRandomService(this._playerIds);
         }       
 
-        public void play()
+        public void setPoint(EventType eventType)
         {         
             Debug.Assert(this._isValidConfig(), "Match not set yet");                       
             Set _set = this._setsToPlay[this._currentSetIndex];
             if (_set != null && !_set.hasEnded())
             {
-                _set.playPoint(this._playerIds);
+                _set.setPoint(this._playerIds, eventType);
             }
-            _set = new Set(this._scoreboard);
+            _set = new Set();
             this._setsToPlay.Add(_set);            
-            _set.play(this._playerIds);
+            _set.setPoint(this._playerIds, eventType);
             this._currentSetIndex++;                            
         }
 
         private bool _isValidConfig()
         {
             return PlayersManager.instance().hasPlayers() && (this._setsToPlay.Count == 3 || this._setsToPlay.Count == 5) && this._playerIds.Length == 2;
-        }                                
-
-        internal string toString(bool hasLack = false)
+        }             
+        
+        internal int[] getIdPlayers()
         {
-            string result = "";
-            foreach (int idPlayer in _playerIds)
-            {
-                result += PlayersManager.instance().getPlayerById(idPlayer).toString(hasLack).PadRight(25);
-                Set _set = this._setsToPlay[this._currentSetIndex];
-                result += _set.toStringGamePoints(idPlayer).PadRight(5);
-                for (int i = 0; i < this._setsToPlay.Capacity; i++)
-                {
-                    result += this._toStringSet(i, idPlayer).PadRight(5);
-                }
-                result += "\n";
-            }            
-            return result;
+            return this._playerIds;
         }
 
-        private string _toStringSet(int setIndex, int idPlayer)
-        {           
-            string result = "";            
-            if (this._setsToPlay.Count > 0 && setIndex < this._setsToPlay.Count)
-            {
-                Set _set = this._setsToPlay[setIndex];                
-                result += " " + _set.toString(idPlayer);
-            } else
-            {
-                result += " -";
-            }                     
-            return result;
-        }       
+        internal int getNumSets()
+        {
+            return this._setsToPlay.Count;            
+        }
+
+        internal int getGamePoints(int playerId)
+        {
+
+        }
+
+        internal int getSetPoints(int setIndex, int playerId)
+        {
+            Debug.Assert(setIndex >= 0 && setIndex < this._setsToPlay.Count, "setIndex fail");
+            Set _set = this._setsToPlay[setIndex];
+            return _set.getPointsOfPlayer(playerId);
+        }
     }
 }
