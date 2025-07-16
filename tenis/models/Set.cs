@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using tenisApp.models;
 
 namespace tennis
@@ -21,35 +22,80 @@ namespace tennis
         internal Set()
         {            
             this._gamesNormal = new List<Game>();
-            this._pointsPerPlayer = new Dictionary<int, int>();                      
+            this._pointsPerPlayer = new Dictionary<int, int>();            
         }
 
         internal void setPoint(Hashtable players, EventType eventType)
         {
-            if (this._isTiebreak())
-            {                
-                this._tiebreak = new Game(players, GameType.TIEBREAK);
+            if (this._isConditionsForTiebreak())
+            {
+                if (this._tiebreak == null)
+                {
+                    this._tiebreak = new Game(players, GameType.TIEBREAK);
+                }                
                 this._tiebreak.setPoint(eventType);
                 if (this._tiebreak.isFinished())
                 {
-                    this._updateSetPoints(this._tiebreak);                    
-                    this._tiebreak.initPointsType();
-                    this._switchService(players);
+                    this._updateSetPoints(this._tiebreak);                                                        
+                    this._switchService(players);                    
                 }
             }
             else
             {
-                Game _game = new Game(players, GameType.NORMAL);
-                this._gamesNormal.Add(_game);
+                Game _game = this._getCurrentGame(players);
                 _game.setPoint(eventType);
-                if (this._isFinished(_game))
+                if (_game.isFinished())
                 {
-                    this._updateSetPoints(_game);                    
-                    _game.initPointsType();
-                    this._switchService(players);
+                    this._updateSetPoints(_game);                                       
+                    this._switchService(players);                    
                 }
             }                        
-        }          
+        }
+
+        private bool _isConditionsForTiebreak()
+        {
+            if (this._gamesNormal.Count == 0)
+            {
+                return false;
+            }
+            Game gameNormal = this._gamesNormal[this._gamesNormal.Count - 1];
+            int _servicePlayerId = gameNormal.getServicePlayerId();
+            int _restPlayerId = gameNormal.getRestPlayerId();
+            return this.getPoints(_servicePlayerId) == MIN_GAMES_FOR_WIN && this.getPoints(_servicePlayerId) == this._pointsPerPlayer[_restPlayerId];
+        }
+
+        internal int getPoints(int playerId)
+        {
+            if (_pointsPerPlayer.ContainsKey(playerId))
+            {
+                return this._pointsPerPlayer[playerId];
+            }
+            return 0;
+        }       
+
+        private Game _getCurrentGame(Hashtable players)
+        {
+            Game _game = null;
+            if (this._gamesNormal.Count == 0)
+            {
+                _game = this._addNewGame(players);
+            } else
+            {
+                _game = this._gamesNormal[this._gamesNormal.Count - 1];
+                if (_game.isFinished())
+                {
+                    _game = this._addNewGame(players);
+                }
+            }
+            return _game;
+        }
+
+        private Game _addNewGame(Hashtable players)
+        {
+            Game _game = new Game(players, GameType.NORMAL);
+            this._gamesNormal.Add(_game);
+            return _game;
+        }
 
         private void _switchService(Hashtable players)
         {
@@ -86,10 +132,10 @@ namespace tennis
         {
             int _servicePlayerId = gameNormal.getServicePlayerId();
             int _restPlayerId = gameNormal.getRestPlayerId();
-            return this._somePlayerHasMinGamesForWin(_servicePlayerId, _restPlayerId) && this._somePlayerHasDiffMinGamesForWin(_servicePlayerId, _restPlayerId);            
+            return this._somePlayerHasMinGames(_servicePlayerId, _restPlayerId) && this._somePlayerHasDiffMinGamesForWin(_servicePlayerId, _restPlayerId);            
         }                     
 
-        private bool _somePlayerHasMinGamesForWin(int _servicePlayerId, int _restPlayerId)
+        private bool _somePlayerHasMinGames(int _servicePlayerId, int _restPlayerId)
         {
             return this.getPoints(_servicePlayerId) >= MIN_GAMES_FOR_WIN || this.getPoints(_restPlayerId) >= MIN_GAMES_FOR_WIN;
         }
@@ -97,38 +143,21 @@ namespace tennis
         private bool _somePlayerHasDiffMinGamesForWin(int _servicePlayerId, int _restPlayerId)
         {
            return Math.Abs(this.getPoints(_servicePlayerId) - this.getPoints(_restPlayerId)) >= DIFF_GAMES_FOR_WIN;
-        }
-
-        private bool _isTiebreak()
-        {
-            if (this._gamesNormal.Count == 0)
-            {
-                return false;
-            }
-            Game gameNormal = this._gamesNormal[this._gamesNormal.Count - 1];
-            int _servicePlayerId = gameNormal.getServicePlayerId();
-            int _restPlayerId = gameNormal.getRestPlayerId();
-            return this.getPoints(_servicePlayerId) == MIN_GAMES_FOR_WIN && this.getPoints(_servicePlayerId) == this._pointsPerPlayer[_restPlayerId];
-        }        
-
-        internal int getPoints(int playerId)
-        {
-            if (_pointsPerPlayer.ContainsKey(playerId))
-            {
-                return this._pointsPerPlayer[playerId];
-            }
-            return 0;
-        }
+        }       
 
         internal string getGamePoints(Player player)
-        {
+        {            
             Game _game = this._gamesNormal[this._gamesNormal.Count - 1];
+            if (this._isConditionsForTiebreak() && this._tiebreak != null)
+            {
+                _game = this._tiebreak;
+            }
             return _game.getPoints(player);
         }       
 
         internal bool isFinished()
         {
-            return (this._isTiebreak() && this._tiebreak.isFinished()) ||
+            return (this._tiebreak != null && this._tiebreak.isFinished()) ||
                        this._isFinished(this._gamesNormal[this._gamesNormal.Count - 1]);
         }
 
@@ -137,9 +166,15 @@ namespace tennis
             return this._gamesNormal[this._gamesNormal.Count - 1].isFinished();
         }
 
-        internal bool isFinishedCurrentTiebreak()
+        internal bool isStartTiebreak()
         {
-            return this._isTiebreak() && this._tiebreak.isFinished();
+            return this._isConditionsForTiebreak() && this._tiebreak == null;
         }
+
+        internal void initCurrentGame()
+        {
+            this._gamesNormal[this._gamesNormal.Count - 1].initPointsType();
+        }
+      
     }
 }

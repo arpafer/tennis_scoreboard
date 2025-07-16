@@ -29,8 +29,7 @@ namespace tennis
         {
             this._currentSetIndex = 0;
             this._players = _players;
-            this._setsToPlay = _setsToPlay;
-            //PlayersManager.instance().setInitialRandomService(this._playerIds);
+            this._setsToPlay = _setsToPlay;            
             (this._players[new Random().Next(2)] as Player).switchService();
         }
 
@@ -52,26 +51,36 @@ namespace tennis
             return this._setsToPlay[this._currentSetIndex - 1].isFinishedCurrentGame();
         }
 
-        internal bool isFinishedCurrentTiebreak()
+        internal bool isStartTiebreak()
         {
-            return this._setsToPlay[this._currentSetIndex - 1].isFinishedCurrentTiebreak();
+            return this._setsToPlay[this._currentSetIndex - 1].isStartTiebreak();
         }
 
         public void setPoint(EventType eventType)
         {         
             Debug.Assert(this._isValidConfig(), "Match not set yet");
             Set _set = null;
-            if (this._setsToPlay.Count > 0 && this._setsToPlay[this._currentSetIndex] != null)
+            if (this._setsToPlay.Count > 0 && this._setsToPlay[this._currentSetIndex - 1] != null)
             {
-                _set = this._setsToPlay[this._currentSetIndex];
+                _set = this._setsToPlay[this._currentSetIndex - 1];
+                if (_set.isFinished())
+                {
+                    _set = this._addNewSet();
+                }
             }
             if (_set == null) 
             {
-                _set = new Set();
-                this._setsToPlay.Add(_set);
-                this._currentSetIndex++;
+                _set = this._addNewSet();
             }                             
             _set.setPoint(this._players, eventType);            
+        }
+
+        private Set _addNewSet()
+        {
+            Set _set = new Set();
+            this._setsToPlay.Add(_set);
+            this._currentSetIndex++;
+            return _set;
         }
 
         private bool _isValidConfig()
@@ -89,10 +98,10 @@ namespace tennis
             return this._setsToPlay.Count;            
         }
 
-        internal string getGamePoints(int setIndex, Player player)
+        internal string getCurrentGamePoints(Player player)
         {
-            Debug.Assert(setIndex >= 0 && setIndex < this._setsToPlay.Count, "setIndex fail");
-            Set _set = this._setsToPlay[setIndex];
+            Debug.Assert(player != null, "player fail");
+            Set _set = this._setsToPlay[this._currentSetIndex - 1];
             return _set.getGamePoints(player);
         }
 
@@ -108,5 +117,11 @@ namespace tennis
             Debug.Assert(this._players.ContainsKey(playerId), "playerId should exist");
             return this._players[playerId] as Player;
         }
+
+        internal void initCurrentGame()
+        {
+            Set _set = this._setsToPlay[this._setsToPlay.Count - 1];
+            _set.initCurrentGame();
+        }       
     }
 }

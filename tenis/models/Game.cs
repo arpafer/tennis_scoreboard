@@ -12,15 +12,13 @@ namespace tennis
 {
     internal class Game
     {        
-        protected PointsPair _pointsPair;
-        protected bool _isServiceLack;                              
+        protected PointsPair _pointsPair;        
         private GameType _gameType;
         private Hashtable _players;
 
         internal Game(Hashtable players, GameType gameType)
         {
-            this._gameType = gameType;
-            this._isServiceLack = false;
+            this._gameType = gameType;            
             this._players = players;            
             this.initPointsType();
         }
@@ -61,27 +59,28 @@ namespace tennis
         }
 
         internal void setPoint(EventType eventType)
-        {                                            
+        {
+            Player _playerWithService = this._players[this.getServicePlayerId()] as Player;
             switch (eventType)
             {
                 case EventType.POINT_OF_SERVICE:
-                    this._pointsPair.addServicePoint();                    
+                    this._pointsPair.addServicePoint();
+                    _playerWithService.deactivateLack();
                     break;
                 case EventType.LACK_OF_SERVICE:
-                    if (this._isServiceLack)
+                    if (_playerWithService.hasLack())
                     {
                         this._pointsPair.addRestPoint();
-                        this._isServiceLack = false;
-                        (this._players[this.getServicePlayerId()] as Player).deactivateLack();
+                        _playerWithService.deactivateLack();
                     }
                     else
                     {
-                        this._isServiceLack = true;
-                        (this._players[this.getServicePlayerId()] as Player).activateLack();
+                        _playerWithService.activateLack();
                     }
                     break;
                 case EventType.POINT_OF_REST:
-                    this._pointsPair.addRestPoint();                    
+                    this._pointsPair.addRestPoint();
+                    _playerWithService.deactivateLack();
                     break;
             }                                
         }                                
@@ -92,7 +91,7 @@ namespace tennis
         }
 
         internal string getPoints(Player player)
-        {
+        {           
             if (player.hasService())
             {
                 return this._pointsPair.toStringServicePoints();

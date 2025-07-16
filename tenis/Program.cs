@@ -4,10 +4,8 @@ using tennis;
 
 
 Match match = new Match();
-MatchConfigurator matchConfigView = new MatchConfigurator(match);
-matchConfigView.interact();
-ScoreBoard scoreBoard = new ScoreBoard(match);
-scoreBoard.interact();
+new MatchConfigurator(match).interact();
+new ScoreBoard(match).interact();
 
 
 

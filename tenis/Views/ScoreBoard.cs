@@ -20,10 +20,10 @@ namespace tenisApp.Views
         internal void interact()
         {            
             while (!this._match.isFinished())
-            {
-                int _option = this._selectAction();                
-                this._match.setPoint((EventType)_option);                
+            {                
                 Console.WriteLine(this._toString());
+                int _option = this._selectAction();
+                this._match.setPoint((EventType)_option);
                 new GameResult(this._match).interact();                
             }
         }
@@ -34,8 +34,9 @@ namespace tenisApp.Views
             Hashtable _players = this._match.getPlayers();
             foreach (int _playerKey in _players.Keys) 
             {
-                _result += this._showPlayerInfo(_playerKey);
-                _result += this._showSetInfo(_playerKey);                
+                _result += this._showPlayerInfo(_playerKey).PadRight(15);
+                _result += this._showSetInfo(_playerKey);
+                _result += "\n";
             }
             return _result;
         }
@@ -52,7 +53,7 @@ namespace tenisApp.Views
             {
                 result = " * ";
             }
-            result += player.Id + ". " + player.Name + " : ";
+            result += player.Name + " : ";
             return result;
         }
 
@@ -61,11 +62,13 @@ namespace tenisApp.Views
             Player player = this._match.getPlayerByKey(playerKey);
             string _result = "";
             int _numSets = this._match.getNumSets();
-            int _playerId = 0;
-            for (int _setIndex = 0; _setIndex < _numSets; _setIndex++)
+            if (_numSets > 0)
             {
-                _result += this._match.getGamePoints(_setIndex, player);
-                _result += this._match.getSetPoints(_setIndex, playerKey);
+                _result += this._match.getCurrentGamePoints(player).PadRight(5);
+            }
+            for (int _setIndex = 0; _setIndex < _numSets; _setIndex++)
+            {                
+                _result += this._match.getSetPoints(_setIndex, playerKey).ToString().PadRight(5);
             }
             return _result;
         }

@@ -20,19 +20,20 @@ namespace tenisApp.Views
         {
             if (this._match.isFinishedCurrentGame())
             {
-                Console.WriteLine("GAME BALL !!!\n");
+                Console.WriteLine("\nGAME BALL !!!\n");
+                this._match.initCurrentGame();
             }
             if (this._match.isFinishedCurrentSet())
             {
-                Console.WriteLine("SET BALL !!!\n");
+                Console.WriteLine("\nSET BALL !!!\n");                
             }
-            if (this._match.isFinishedCurrentTiebreak())
+            if (this._match.isStartTiebreak())
             {
-                Console.WriteLine("TIEBREAK !!!\n");
+                Console.WriteLine("\nTIEBREAK !!!\n");
             }
             if (this._match.isFinished())
             {
-                Console.WriteLine("END MATCH !!!\n");
+                Console.WriteLine("\nEND MATCH !!!\n");
             }
         }
     }

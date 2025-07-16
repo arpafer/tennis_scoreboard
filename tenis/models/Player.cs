@@ -20,8 +20,7 @@ namespace tennis
             this._service = false;
             this._lack = false;
         }       
-
-        public int Id {  get { return this._id; } }
+        
         public string Name { get { return this._name; } }
 
         internal bool isEqualTo(Player player)

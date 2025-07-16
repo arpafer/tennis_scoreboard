@@ -39,15 +39,12 @@ namespace tenisApp.Views
                 string name = Console.ReadLine();                
                 Console.WriteLine("Name: " + name + "; id: " + id);
                 this._players.Add(id - 1, new Player(name, id++));                
-            }            
-            // PlayersManager.instance().setPlayers(this._players);
+            }                        
         }
 
         private void _readMatchConfig()
         {            
-            List<Set> _setsToPlay = new List<Set>(this._readSetsNum());
-            // int[] _playerIds = this._readIds();
-
+            List<Set> _setsToPlay = new List<Set>(this._readSetsNum());            
             this._match.set(_setsToPlay, this._players);
             Console.WriteLine("Configured Match !!\n");
         }
@@ -79,37 +76,6 @@ namespace tenisApp.Views
         private int _setsToPlayer(int numSets)
         {
             return numSets;
-        }
-
-        private int[] _readIds()
-        {
-            Console.Write("ids: ");
-            string _ids = Console.ReadLine();
-            string[] _idsChunks = _ids.Split(',');
-            List<int> idsArray = new List<int>();
-            if (_idsChunks.Length == MAX_PLAYERS_PER_MATCH)
-            {
-                foreach (string _id in _idsChunks)
-                {
-                    if (PlayersManager.instance().contains(int.Parse(_id)))
-                    {
-                        idsArray.Add(int.Parse(_id));
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid id " + _ids);
-                    }
-                }
-                if (idsArray.Count != MAX_PLAYERS_PER_MATCH)
-                {
-                    Console.WriteLine("Invalid ids number. Should be 2");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Invalid ids number. Should be 2");
-            }
-            return idsArray.ToArray();
-        }
+        }       
     }
 }
