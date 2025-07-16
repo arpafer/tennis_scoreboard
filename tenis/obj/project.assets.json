@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\G78405210\\.nuget\\packages\\": {}
+    "C:\\Users\\Antonio\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\G78405210\\Documents\\EscuelaIT\\tenis_con_vistas\\tennis_scoreboard\\tenis\\tenisApp.csproj",
+      "projectUniqueName": "F:\\Users\\Antonio\\Documents\\escuelait\\CURSO_DISEÑO_SOFTWARE\\tenis\\tenis\\tenisApp.csproj",
       "projectName": "tenisApp",
-      "projectPath": "C:\\Users\\G78405210\\Documents\\EscuelaIT\\tenis_con_vistas\\tennis_scoreboard\\tenis\\tenisApp.csproj",
-      "packagesPath": "C:\\Users\\G78405210\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\G78405210\\Documents\\EscuelaIT\\tenis_con_vistas\\tennis_scoreboard\\tenis\\obj\\",
+      "projectPath": "F:\\Users\\Antonio\\Documents\\escuelait\\CURSO_DISEÑO_SOFTWARE\\tenis\\tenis\\tenisApp.csproj",
+      "packagesPath": "C:\\Users\\Antonio\\.nuget\\packages\\",
+      "outputPath": "F:\\Users\\Antonio\\Documents\\escuelait\\CURSO_DISEÑO_SOFTWARE\\tenis\\tenis\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\G78405210\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Antonio\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -28,8 +28,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
-        "https://jfrtfndc01.bintercanarias.es/artifactory/api/nuget/v2/nuget-repo": {}
+        "https://jfrtfndc01.bintercanarias.es:443/artifactory/api/nuget/nuget-repo": {}
       },
       "frameworks": {
         "net8.0": {
@@ -67,7 +66,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

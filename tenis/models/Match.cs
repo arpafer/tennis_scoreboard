@@ -59,8 +59,9 @@ namespace tennis
         public void setPoint(EventType eventType)
         {         
             Debug.Assert(this._isValidConfig(), "Match not set yet");
+
             Set _set = null;
-            if (this._setsToPlay.Count > 0 && this._setsToPlay[this._currentSetIndex - 1] != null)
+            if (this._existSetInPlay())
             {
                 _set = this._setsToPlay[this._currentSetIndex - 1];
                 if (_set.isFinished())
@@ -73,6 +74,11 @@ namespace tennis
                 _set = this._addNewSet();
             }                             
             _set.setPoint(this._players, eventType);            
+        }
+
+        private bool _existSetInPlay()
+        {
+            return this._setsToPlay.Count > 0 && this._setsToPlay[this._currentSetIndex - 1] != null;
         }
 
         private Set _addNewSet()

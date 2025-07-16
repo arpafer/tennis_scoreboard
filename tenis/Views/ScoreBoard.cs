@@ -45,7 +45,7 @@ namespace tenisApp.Views
         {
             Player player = this._match.getPlayerByKey(playerKey);
             string result = "   ";
-            if (player.hasLack() && player.hasService())
+            if (player.hasLack())
             {
                 result = " + ";
             }
