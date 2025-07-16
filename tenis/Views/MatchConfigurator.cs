@@ -12,8 +12,7 @@ namespace tenisApp.Views
     internal class MatchConfigurator
     {
         private Hashtable _players;
-        private Match _match;
-        private const int MAX_PLAYERS_PER_MATCH = 2;
+        private Match _match;        
 
         public MatchConfigurator(Match match)
         {
