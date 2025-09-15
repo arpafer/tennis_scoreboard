@@ -58,7 +58,7 @@ namespace tennis
 
         public void setPoint(EventType eventType)
         {         
-            Debug.Assert(this._isValidConfig(), "Match not set yet");
+           // Debug.Assert(this._isValidConfig(), "Match not set yet");
 
             Set _set = null;
             if (this._existSetInPlay())

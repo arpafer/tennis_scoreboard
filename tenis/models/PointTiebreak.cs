@@ -20,7 +20,7 @@ namespace tennis
 
         internal override bool hasWonTo(Point other)
         {
-            return (this._currentPoint - other.currentPoint) >= 2;
+            return (this._currentPoint - other.currentPoint) >= 2 && this._currentPoint > 6;
         }
 
         internal override string toString()
