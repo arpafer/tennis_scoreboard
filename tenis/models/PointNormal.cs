@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace tennis
 {
-    internal class PointNormal: Point
+    internal class PointNormal: Points
     {
         internal const int ZERO = 0;
         internal const int FIFTEEN = 1;
@@ -17,48 +17,48 @@ namespace tennis
 
         internal PointNormal()
         {
-            this._currentPoint = ZERO;
+            this._currentPoints = ZERO;
         }        
 
         internal void add(PointNormal other)
         {
-            switch (this._currentPoint)
+            switch (this._currentPoints)
             {
-                case ZERO: this._currentPoint = FIFTEEN; break;
-                case FIFTEEN: this._currentPoint = THIRTY; break;
-                case THIRTY: this._currentPoint = FORTY; break;
+                case ZERO: this._currentPoints = FIFTEEN; break;
+                case FIFTEEN: this._currentPoints = THIRTY; break;
+                case THIRTY: this._currentPoints = FORTY; break;
                 case FORTY:
-                    if (other._currentPoint == AD)
+                    if (other._currentPoints == AD)
                     {
-                        this._currentPoint = other._currentPoint = FORTY;
+                        this._currentPoints = other._currentPoints = FORTY;
                     } else 
-                       this._currentPoint = AD; 
+                       this._currentPoints = AD; 
                     break;
                 case AD:                     
-                    this._currentPoint = WIN; 
+                    this._currentPoints = WIN; 
                     break;
             }
         }
 
         internal bool isDeuceWinner()
         {
-            return this._currentPoint == PointNormal.WIN;
+            return this._currentPoints == PointNormal.WIN;
         }
 
         internal bool hasAd()
         {
-            return this._currentPoint == PointNormal.AD;
+            return this._currentPoints == PointNormal.AD;
         }
 
-        internal override bool hasWonTo(Point other)
+        internal override bool hasWonTo(Points other)
         {
-            return this._currentPoint == PointNormal.WIN || (this._currentPoint == PointNormal.AD && other.currentPoint < FORTY);
+            return this._currentPoints == PointNormal.WIN || (this._currentPoints == PointNormal.AD && other.currentPoints < FORTY);
         }
 
         internal override string toString()
         {
             string result = "";
-            switch (this._currentPoint)
+            switch (this._currentPoints)
             {
                 case ZERO: result = "0"; break;
                 case FIFTEEN: result = "15"; break;

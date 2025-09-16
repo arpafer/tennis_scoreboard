@@ -17,6 +17,7 @@ namespace tenisApp.models
         {
             this._pointsPair = new TiebreakPointsPair();
             _firstService = true;
+            this._serviceTurns = 0;
         }
 
         internal void setPoint(EventType eventType)
@@ -26,16 +27,21 @@ namespace tenisApp.models
             if (this._firstService)
             {
                 this._firstService = false;
-                this._serviceTurns = 2;
+                this._startServiceTurn();
             } else
             {
                 this._serviceTurns++;
             }
             if (this._serviceTurns == 2)
             {
-                this._switchService();
-                this._serviceTurns = 0;
+                this._startServiceTurn();
             }
+        }
+
+        private void _startServiceTurn()
+        {
+            this._switchService();
+            this._serviceTurns = 0;
         }
 
         private void _switchService()
@@ -44,6 +50,8 @@ namespace tenisApp.models
             {
                 _player.switchService();
             }
+
+            (this._pointsPair as TiebreakPointsPair).switchPoints();
         }
     }
 }

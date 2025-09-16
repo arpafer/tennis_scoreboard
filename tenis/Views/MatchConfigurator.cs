@@ -37,7 +37,8 @@ namespace tenisApp.Views
                 Console.Write("Name: ");
                 string name = Console.ReadLine();                
                 Console.WriteLine("Name: " + name + "; id: " + id);
-                this._players.Add(id - 1, new Player(name, id++));                
+                this._players.Add(id - 1, new Player(name, id - 1));
+                id++;
             }                        
         }
 

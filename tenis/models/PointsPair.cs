@@ -9,8 +9,8 @@ namespace tenisApp.models
 {
     internal abstract class PointsPair
     {
-        protected Point _servicePoint;
-        protected Point _restPoint;
+        protected Points _servicePoints;
+        protected Points _restPoints;
 
         internal abstract bool isWinnerService();
         internal abstract void addServicePoint();
@@ -20,12 +20,12 @@ namespace tenisApp.models
 
         internal string toStringServicePoints()
         {
-            return this._servicePoint.toString();
+            return this._servicePoints.toString();
         }
 
         internal string toStringRestPoints()
         {
-            return this._restPoint.toString();
-        }
+            return this._restPoints.toString();
+        }        
     }
 }

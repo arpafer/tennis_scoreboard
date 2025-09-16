@@ -28,25 +28,26 @@ namespace tennis
 
         internal int getServicePlayerId()
         {
-            if ((this._players[0] as Player).hasService())
+            foreach (Player _player in this._players.Values)
             {
-                return 0;
-            } else
-            {
-                return 1;
+                if (_player.hasService())
+                {
+                    return _player.Id;
+                }
             }
+            return 0;
         }
 
         internal int getRestPlayerId()
         {
-            if (!(this._players[0] as Player).hasService())
+            foreach (Player _player in this._players.Values)
             {
-                return 0;
+                if (!_player.hasService())
+                {
+                    return _player.Id;
+                }
             }
-            else
-            {
-                return 1;
-            }
+            return 0;
         }
 
         internal void setPoint(EventType eventType)

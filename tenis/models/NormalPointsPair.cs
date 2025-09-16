@@ -11,28 +11,28 @@ namespace tenisApp.models
     {       
         internal NormalPointsPair(): base()
         {
-            this._servicePoint = new PointNormal();
-            this._restPoint = new PointNormal();
+            this._servicePoints = new PointNormal();
+            this._restPoints = new PointNormal();
         }       
 
         internal override bool isWinnerService()
         {
-            return this._servicePoint.hasWonTo(this._restPoint) || (this._servicePoint as PointNormal).isDeuceWinner();
+            return this._servicePoints.hasWonTo(this._restPoints) || (this._servicePoints as PointNormal).isDeuceWinner();
         }
 
         internal override void addServicePoint()
         {
-            (this._servicePoint as PointNormal).add(this._restPoint as PointNormal);
+            (this._servicePoints as PointNormal).add(this._restPoints as PointNormal);
         }
 
         internal override void addRestPoint()
         {
-            (this._restPoint as PointNormal).add(this._servicePoint as PointNormal);
+            (this._restPoints as PointNormal).add(this._servicePoints as PointNormal);
         }
 
         internal override bool hasWinner()
         {
-            return ((this._servicePoint as PointNormal).isDeuceWinner() || (this._restPoint as PointNormal).isDeuceWinner() || this._servicePoint.hasWonTo(this._restPoint) || this._restPoint.hasWonTo(this._servicePoint));
+            return ((this._servicePoints as PointNormal).isDeuceWinner() || (this._restPoints as PointNormal).isDeuceWinner() || this._servicePoints.hasWonTo(this._restPoints) || this._restPoints.hasWonTo(this._servicePoints));
         }       
     }
 }

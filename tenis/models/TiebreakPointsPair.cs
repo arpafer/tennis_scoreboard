@@ -11,28 +11,33 @@ namespace tenisApp.models
     {
         internal TiebreakPointsPair(): base() 
         {
-            this._servicePoint = new PointTiebreak();
-            this._restPoint = new PointTiebreak();
+            this._servicePoints = new PointTiebreak();
+            this._restPoints = new PointTiebreak();
         }
 
         internal override void addRestPoint()
         {
-            (this._restPoint as PointTiebreak).add();
+            (this._restPoints as PointTiebreak).add();
         }
 
         internal override void addServicePoint()
         {
-            (this._servicePoint as PointTiebreak).add();
+            (this._servicePoints as PointTiebreak).add();
         }
 
         internal override bool hasWinner()
         {
-            return this._servicePoint.hasWonTo(this._restPoint) || this._restPoint.hasWonTo(this._servicePoint);
+            return this._servicePoints.hasWonTo(this._restPoints) || this._restPoints.hasWonTo(this._servicePoints);
         }       
 
         internal override bool isWinnerService()
         {
-            return this._servicePoint.hasWonTo(this._restPoint);
+            return this._servicePoints.hasWonTo(this._restPoints);
+        }
+
+        internal void switchPoints()
+        {
+            this._servicePoints.switchPoints(this._restPoints);
         }
     }
 }

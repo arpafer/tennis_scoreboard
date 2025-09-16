@@ -6,26 +6,26 @@ using System.Threading.Tasks;
 
 namespace tennis
 {
-    internal class PointTiebreak: Point
+    internal class PointTiebreak: Points
     {
         internal PointTiebreak() 
         {
-            this._currentPoint = 0;
+            this._currentPoints = 0;
         }
 
         internal void add()
         {
-            this._currentPoint++;
+            this._currentPoints++;
         }
 
-        internal override bool hasWonTo(Point other)
+        internal override bool hasWonTo(Points other)
         {
-            return (this._currentPoint - other.currentPoint) >= 2 && this._currentPoint > 6;
+            return (this._currentPoints - other.currentPoints) >= 2 && this._currentPoints > 6;
         }
 
         internal override string toString()
         {
-            return this._currentPoint.ToString();
+            return this._currentPoints.ToString();
         }
     }
 }

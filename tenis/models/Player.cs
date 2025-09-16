@@ -22,6 +22,7 @@ namespace tennis
         }       
         
         public string Name { get { return this._name; } }
+        public int Id {  get { return this._id; } }
 
         internal bool isEqualTo(Player player)
         {
@@ -61,6 +62,6 @@ namespace tennis
         internal bool hasLack()
         {
             return this._lack;
-        }
+        }       
     }
 }
