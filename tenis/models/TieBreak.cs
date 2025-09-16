@@ -21,8 +21,7 @@ namespace tenisApp.models
         }
 
         internal void setPoint(EventType eventType)
-        {
-            Console.WriteLine("Siguiente point tiebreak - turn: " + this._serviceTurns + " firstService: " + this._firstService);
+        {            
             base.setPoint(eventType);
             if (this._firstService)
             {
