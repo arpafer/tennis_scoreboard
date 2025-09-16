@@ -12,27 +12,18 @@ namespace tennis
 {
     internal class Game
     {        
-        protected PointsPair _pointsPair;        
-        private GameType _gameType;
-        private Hashtable _players;
+        protected PointsPair _pointsPair;                
+        protected Hashtable _players;
 
-        internal Game(Hashtable players, GameType gameType)
-        {
-            this._gameType = gameType;            
-            this._players = players;            
+        internal Game(Hashtable players)
+        {            
+            this._players = players;
             this.initPointsType();
         }
 
         internal void initPointsType()
-        {
-            if (this._gameType == GameType.NORMAL)
-            {
-                this._pointsPair = new NormalPointsPair();
-            }
-            else
-            {
-                this._pointsPair = new TiebreakPointsPair();
-            }
+        {            
+           this._pointsPair = new NormalPointsPair();         
         }       
 
         internal int getServicePlayerId()

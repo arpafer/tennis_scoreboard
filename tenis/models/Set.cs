@@ -14,7 +14,7 @@ namespace tennis
     {        
         private List<Game> _gamesNormal;        
         private Dictionary<int, int> _pointsPerPlayer;              
-        private Game _tiebreak;
+        private TieBreak _tiebreak;
         
         private const int DIFF_GAMES_FOR_WIN = 2;
         private const int MIN_GAMES_FOR_WIN = 6;
@@ -31,7 +31,7 @@ namespace tennis
             {
                 if (this._tiebreak == null)
                 {
-                    this._tiebreak = new Game(players, GameType.TIEBREAK);
+                    this._tiebreak = new TieBreak(players);
                 }                
                 this._tiebreak.setPoint(eventType);
                 if (this._tiebreak.isFinished())
@@ -92,7 +92,7 @@ namespace tennis
 
         private Game _addNewGame(Hashtable players)
         {
-            Game _game = new Game(players, GameType.NORMAL);
+            Game _game = new Game(players);
             this._gamesNormal.Add(_game);
             return _game;
         }
