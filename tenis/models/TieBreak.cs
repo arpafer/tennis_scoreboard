@@ -15,7 +15,7 @@ namespace tenisApp.models
 
         internal TieBreak(Hashtable players) : base(players)
         {
-            this._pointsPair = new TiebreakPointsPair();
+            this._pointsManager = new TiebreakPointsManager();
             _firstService = true;
             this._serviceTurns = 0;
         }
@@ -50,7 +50,7 @@ namespace tenisApp.models
                 _player.switchService();
             }
 
-            (this._pointsPair as TiebreakPointsPair).switchPoints();
+            (this._pointsManager as TiebreakPointsManager).switchPoints();
         }
     }
 }

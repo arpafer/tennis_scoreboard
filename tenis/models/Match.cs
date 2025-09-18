@@ -22,15 +22,16 @@ namespace tennis
         {
             this._currentSetIndex = 0;
             this._players = new Hashtable();
-            this._setsToPlay = new List<Set>();
+            this._setsToPlay = new List<Set>();            
         }
 
         public void set(List<Set> _setsToPlay, Hashtable _players)
         {
+            Debug.Assert(this._isValidConfig(_setsToPlay, _players), "Match not set yet");
             this._currentSetIndex = 0;
             this._players = _players;
             this._setsToPlay = _setsToPlay;            
-            (this._players[new Random().Next(2)] as Player).switchService();
+            (this._players[new Random().Next(2)] as Player).switchService();            
         }
 
         internal bool isFinished()
@@ -57,9 +58,7 @@ namespace tennis
         }
 
         public void setPoint(EventType eventType)
-        {         
-           // Debug.Assert(this._isValidConfig(), "Match not set yet");
-
+        {                     
             Set _set = null;
             if (this._existSetInPlay())
             {
@@ -89,9 +88,9 @@ namespace tennis
             return _set;
         }
 
-        private bool _isValidConfig()
+        private bool _isValidConfig(List<Set> _setsToPlay, Hashtable _players)
         {
-            return (this._setsToPlay.Count == 3 || this._setsToPlay.Count == 5) && this._players.Count == 2;
+            return (_setsToPlay.Count == 3 || _setsToPlay.Count == 5) && _players.Count == 2;
         }             
         
         internal Hashtable getPlayers()

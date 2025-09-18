@@ -12,7 +12,7 @@ namespace tennis
 {
     internal class Game
     {        
-        protected PointsPair _pointsPair;                
+        protected PointsManager _pointsManager;                
         protected Hashtable _players;
 
         internal Game(Hashtable players)
@@ -23,7 +23,7 @@ namespace tennis
 
         internal void initPointsType()
         {            
-           this._pointsPair = new NormalPointsPair();         
+           this._pointsManager = new GamePointsManager();         
         }       
 
         internal int getServicePlayerId()
@@ -56,13 +56,13 @@ namespace tennis
             switch (eventType)
             {
                 case EventType.POINT_OF_SERVICE:
-                    this._pointsPair.addServicePoint();
+                    this._pointsManager.addServicePoint();
                     _playerWithService.deactivateLack();
                     break;
                 case EventType.LACK_OF_SERVICE:
                     if (_playerWithService.hasLack())
                     {
-                        this._pointsPair.addRestPoint();
+                        this._pointsManager.addRestPoint();
                         _playerWithService.deactivateLack();
                     }
                     else
@@ -71,7 +71,7 @@ namespace tennis
                     }
                     break;
                 case EventType.POINT_OF_REST:
-                    this._pointsPair.addRestPoint();
+                    this._pointsManager.addRestPoint();
                     _playerWithService.deactivateLack();
                     break;
             }                                
@@ -79,23 +79,23 @@ namespace tennis
        
         internal bool isWinnerService()
         {
-            return this._pointsPair.isWinnerService();
+            return this._pointsManager.isWinnerService();
         }
 
         internal string getPoints(Player player)
         {           
             if (player.hasService())
             {
-                return this._pointsPair.toStringServicePoints();
+                return this._pointsManager.toStringServicePoints();
             } else
             {
-                return this._pointsPair.toStringRestPoints();
+                return this._pointsManager.toStringRestPoints();
             }
         }
 
         internal bool isFinished()
         {
-            return this._pointsPair.hasWinner();
+            return this._pointsManager.hasWinner();
         }
     }
 }

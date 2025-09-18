@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace tennis
 {
-    internal class PointTiebreak: Points
+    internal class PointsTiebreak: Points
     {
-        internal PointTiebreak() 
+        internal PointsTiebreak() 
         {
             this._currentPoints = 0;
         }

@@ -7,7 +7,7 @@ using tennis;
 
 namespace tenisApp.models
 {
-    internal abstract class PointsPair
+    internal abstract class PointsManager
     {
         protected Points _servicePoints;
         protected Points _restPoints;

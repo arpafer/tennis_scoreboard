@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace tennis
 {
-    internal class PointNormal: Points
+    internal class PointsGame: Points
     {
         internal const int ZERO = 0;
         internal const int FIFTEEN = 1;
@@ -15,12 +15,12 @@ namespace tennis
         internal const int AD = 4;
         internal const int WIN = 5;        
 
-        internal PointNormal()
+        internal PointsGame()
         {
             this._currentPoints = ZERO;
         }        
 
-        internal void add(PointNormal other)
+        internal void add(PointsGame other)
         {
             switch (this._currentPoints)
             {
@@ -42,17 +42,17 @@ namespace tennis
 
         internal bool isDeuceWinner()
         {
-            return this._currentPoints == PointNormal.WIN;
+            return this._currentPoints == PointsGame.WIN;
         }
 
         internal bool hasAd()
         {
-            return this._currentPoints == PointNormal.AD;
+            return this._currentPoints == PointsGame.AD;
         }
 
         internal override bool hasWonTo(Points other)
         {
-            return this._currentPoints == PointNormal.WIN || (this._currentPoints == PointNormal.AD && other.currentPoints < FORTY);
+            return this._currentPoints == PointsGame.WIN || (this._currentPoints == PointsGame.AD && other.currentPoints < FORTY);
         }
 
         internal override string toString()

@@ -7,22 +7,22 @@ using tennis;
 
 namespace tenisApp.models
 {
-    internal class TiebreakPointsPair: PointsPair
+    internal class TiebreakPointsManager: PointsManager
     {
-        internal TiebreakPointsPair(): base() 
+        internal TiebreakPointsManager(): base() 
         {
-            this._servicePoints = new PointTiebreak();
-            this._restPoints = new PointTiebreak();
+            this._servicePoints = new PointsTiebreak();
+            this._restPoints = new PointsTiebreak();
         }
 
         internal override void addRestPoint()
         {
-            (this._restPoints as PointTiebreak).add();
+            (this._restPoints as PointsTiebreak).add();
         }
 
         internal override void addServicePoint()
         {
-            (this._servicePoints as PointTiebreak).add();
+            (this._servicePoints as PointsTiebreak).add();
         }
 
         internal override bool hasWinner()
