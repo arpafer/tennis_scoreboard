@@ -23,17 +23,22 @@ namespace tenisApp.models
         internal void setPoint(EventType eventType)
         {            
             base.setPoint(eventType);
-            if (this._firstService)
+            Player _playerWithService = this._players[this.getServicePlayerId()] as Player;
+            if (!_playerWithService.hasLack())
             {
-                this._firstService = false;
-                this._startServiceTurn();
-            } else
-            {
-                this._serviceTurns++;
-            }
-            if (this._serviceTurns == 2)
-            {
-                this._startServiceTurn();
+                if (this._firstService)
+                {
+                    this._firstService = false;
+                    this._startServiceTurn();
+                }
+                else
+                {
+                    this._serviceTurns++;
+                }
+                if (this._serviceTurns == 2)
+                {
+                    this._startServiceTurn();
+                }
             }
         }
 
