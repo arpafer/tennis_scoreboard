@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace tennis
 {
-    public class Player
+    internal class Player
     {
         private int _id;
         private string _name;
         private bool _service;
         private bool _lack;
 
-        public Player(string name, int id)
+        internal Player(string name, int id)
         {
             this._id = id;
             this._name = name;
@@ -21,8 +21,8 @@ namespace tennis
             this._lack = false;
         }       
         
-        public string Name { get { return this._name; } }
-        public int Id {  get { return this._id; } }
+        internal string Name { get { return this._name; } }
+        internal int Id {  get { return this._id; } }
 
         internal bool isEqualTo(Player player)
         {

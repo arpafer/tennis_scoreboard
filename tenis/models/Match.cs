@@ -18,14 +18,14 @@ namespace tennis
         private Hashtable _players;
         private List<Set> _setsToPlay;
                 
-        public Match()
+        internal Match()
         {
             this._currentSetIndex = 0;
             this._players = new Hashtable();
             this._setsToPlay = new List<Set>();            
         }
 
-        public void set(List<Set> _setsToPlay, Hashtable _players)
+        internal void set(List<Set> _setsToPlay, Hashtable _players)
         {
             Debug.Assert(this._isValidConfig(_setsToPlay, _players), "Match not set yet");
             this._currentSetIndex = 0;
@@ -57,7 +57,7 @@ namespace tennis
             return this._setsToPlay[this._currentSetIndex - 1].isStartTiebreak();
         }
 
-        public void setPoint(EventType eventType)
+        internal void setPoint(EventType eventType)
         {                     
             Set _set = null;
             if (this._existSetInPlay())

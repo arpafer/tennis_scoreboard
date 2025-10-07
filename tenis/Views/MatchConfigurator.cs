@@ -14,7 +14,7 @@ namespace tenisApp.Views
         private Hashtable _players;
         private Match _match;        
 
-        public MatchConfigurator(Match match)
+        internal MatchConfigurator(Match match)
         {
             this._players = new Hashtable();
             this._match = match;
