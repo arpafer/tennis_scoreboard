@@ -28,8 +28,7 @@ namespace tenisApp.Views
 
         private void _registerTournamentPlayers()
         {
-            Console.WriteLine("Register the players: (Enter for finish)");
-            bool _exit = false;
+            Console.WriteLine("Register the players: (Enter for finish)");            
             int id = 1;
             Console.WriteLine("readPlayers");
             while (id <= 2)

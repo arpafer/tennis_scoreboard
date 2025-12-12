@@ -21,14 +21,14 @@ namespace tenisApp.Views
         {            
             while (!this._match.isFinished())
             {                
-                Console.WriteLine(this._toString());
+                Console.WriteLine(this._showCurrentStatus());
                 int _option = this._selectAction();
                 this._match.setPoint((EventType)_option);
                 new GameResult(this._match).interact();                
             }
         }
 
-        internal string _toString()
+        internal string _showCurrentStatus()
         {
             string _result = "";
             Hashtable _players = this._match.getPlayers();
